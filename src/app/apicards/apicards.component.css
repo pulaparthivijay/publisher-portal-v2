@@ -1,0 +1,23 @@
+.noapi-card{
+    height:400px;
+    width:100%;
+    border:1px solid rgba(0, 0, 0, 0.27);
+    border-radius:12px;
+}
+.create-para{
+    font-size: 20px;
+    color:rgba(0, 0, 0, 0.56);
+}
+.create-head{
+    font-size:25px;
+    margin-top:20px;
+}
+.no-api-card{
+    height:80vh;
+}
+.api-card{
+    height:300px;
+    border-radius:10px;
+    border:1px solid lightgray;
+    padding:20px;
+}

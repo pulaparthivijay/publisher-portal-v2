@@ -1,0 +1,29 @@
+@if(isShowParent){
+<div class="container-fluid">
+    @if(isShowNoApisCard){
+    <div class="d-flex justify-content-center align-items-center no-api-card">
+        <div class="col-sm-4">
+            <div class="noapi-card d-flex flex-column align-items-center justify-content-center">
+                <img src="../../assets/images/Page-1.svg" width="120px" height="120px"/>
+                <h3 class="create-head">No API's yet.!</h3>
+                <p class="create-para">Create an API here</p>
+                <button class="btn btn-outline-primary" (click)="goToCreateApi()">Create API</button>
+            </div>
+        </div>
+    </div>
+}
+    @else{
+        <div class="row">
+            @for(item of items; track item.id){
+            <div class="col-sm-3">
+                <div class="api-card"(click)="goToApiViewPage()">
+                    <p>{{item.name}}</p>
+                </div>
+            </div>
+        }
+        </div>
+    }
+</div>
+}@else{
+    <router-outlet></router-outlet>
+}

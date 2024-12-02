@@ -1,0 +1,11 @@
+.create-api-card{
+    height:80vh
+}
+.create-card{
+    padding:20px;
+    height:300px;
+    width:100%;
+    border:1px solid rgba(0, 0, 0, 0.27);
+    border-radius:12px;
+    background-color: white;
+}

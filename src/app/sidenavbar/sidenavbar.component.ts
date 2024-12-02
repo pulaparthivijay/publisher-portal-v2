@@ -44,7 +44,7 @@ export class SidenavbarComponent implements OnDestroy {
   // );
 
   private _mobileQueryListener: () => void;
-sidebarView:any;
+sidebarView:any='side';
 isSidebarExpanded = false;
 @ViewChild(MatSidenav)
   sidenav!: MatSidenav;

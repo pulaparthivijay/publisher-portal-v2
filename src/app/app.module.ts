@@ -25,6 +25,7 @@ import { ParameterForwardingComponent } from './parameter-forwarding/parameter-f
 import { AuthComponent } from './auth/auth.component';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthInterceptor } from './auth.interceptor';
+import { DeploymentComponent } from './deployment/deployment.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -63,7 +64,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     ViewapiComponent,
     ApiOverviewComponent,
     ParameterForwardingComponent,
-    AuthComponent
+    AuthComponent,
+    DeploymentComponent
   ],
   imports: [
     BrowserModule,

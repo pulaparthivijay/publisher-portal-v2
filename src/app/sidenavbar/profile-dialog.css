@@ -1,0 +1,16 @@
+ul li{
+    list-style-type: none;
+    margin-bottom: 5px;
+}
+ul li:hover{
+    color:blue;
+    cursor: pointer;
+}
+.profile-card{
+    height:180px;
+    width:250px;
+    padding: 0px !important;
+}
+.svg-margin{
+    margin-left:5px;
+}

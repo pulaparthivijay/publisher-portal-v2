@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 gateway-linkcard">
+            
+           <h2>Deploy New Revision</h2>
+           <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description"></textarea>
+            <div id="des" class="form-text">Brief description of the new revision.</div>
+          </div>
+          <h3>APi Gateway</h3>
+          <div class="row">
+            @for(card of gatewayCards;track card){
+                <div class="col-sm-3">
+                  <div class="gateway-card">
+                     {{card.name}}
+                      
+                  </div>
+              </div>
+          }
+          </div>
+          
+        </div>
+    </div>
+</div>

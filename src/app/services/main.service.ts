@@ -8,7 +8,7 @@ import { urls } from '../../urls';
 export class MainService {
 
   constructor(private http:HttpClient) { }
-
+userId=localStorage.getItem('userid')
   getUserDetails(userId:any){
     const url=urls.getUser;
     const headers={
@@ -17,4 +17,22 @@ export class MainService {
     const options={headers:headers}
     return this.http.post(url,null,options)
   }
+
+  getEndpointCards(){
+    const url=urls.getEndpointCards+"?pageNo=0&pageSize=10";
+    const headers={
+      'userId':this.userId
+    }
+    const options:any={headers:headers}
+    return this.http.post(url,null,options)
+  }
+
+  getCards(){
+      const url=urls.getJsonCards+"?pageNo=0&pageSize=10";
+      const headers={
+        'userId':this.userId
+      }
+      const options:any={headers:headers}
+      return this.http.post(url,null,options)
+    }
 }

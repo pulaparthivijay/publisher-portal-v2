@@ -12,13 +12,15 @@
 
 
 import {BreakpointObserver, MediaMatcher} from '@angular/cdk/layout';
-import {ChangeDetectorRef, Component, OnDestroy, ViewChild, inject} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnDestroy, ViewChild, inject} from '@angular/core';
 import {MatListModule} from '@angular/material/list';
 import {MatSidenav, MatSidenavModule} from '@angular/material/sidenav';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { Router } from '@angular/router';
+import { KeycloakService } from 'keycloak-angular';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 /** @title Responsive sidenav */
 @Component({
@@ -50,6 +52,10 @@ isSidebarExpanded = false;
   sidenav!: MatSidenav;
   isMobile= true;
   ngOnInit() {
+    // console.log(this.sidebarView);
+    // console.log(this.isCollapsed);
+    
+    
     this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
       if(screenSize.matches){
         this.isMobile = true;
@@ -81,9 +87,9 @@ isSidebarExpanded = false;
   toggleSidebar() {
     this.isSidebarExpanded = !this.isSidebarExpanded;
   }
-  constructor( private router:Router,private observer: BreakpointObserver) {
+  constructor( private router:Router,private observer: BreakpointObserver,public dialog: MatDialog) {
     this.router.events.subscribe(() => {
-      if(this.router.url === '/apis'){
+      if(this.router.url === '/apis' || this.router.url === '/gateways' ){
         this.sidebarView="side"
       }else{
 this.sidebarView="over"
@@ -100,6 +106,44 @@ this.sidebarView="over"
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      // data: {name: this.name, animal: this.animal},
+      position: {
+        top: '60px',
+        right: '10px'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result:any) => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
+  }
+}
+export interface DialogData {
+  animal: string;
+  name: string;
+}
+@Component({
+  selector: 'profile-dialog',
+  templateUrl: 'profile-dialog.html',
+  styleUrls: ['./profile-dialog.css']
+})
+export class DialogOverviewExampleDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private readonly keyClokService:KeycloakService
+  ) {}
+  logout(){
+    localStorage.clear();
+    this.keyClokService.logout();
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

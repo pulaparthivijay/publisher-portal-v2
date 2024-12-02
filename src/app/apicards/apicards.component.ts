@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { MainService } from '../services/main.service';
 
 @Component({
   selector: 'app-apicards',
@@ -8,7 +9,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 })
 export class ApicardsComponent {
 
-  constructor( private router:Router, private route:ActivatedRoute){
+  constructor( private router:Router, private route:ActivatedRoute,private mainSer:MainService){
 
     this.router.events.subscribe((event) => {
      
@@ -24,6 +25,18 @@ export class ApicardsComponent {
       }
     }});
   }
+  endpointCards:any;
+  ngOnInit(){
+this.mainSer.getEndpointCards().subscribe({
+  next:((res:any)=>{
+    console.log(res);
+    this.endpointCards=res.endpointCards
+  }),
+  error:(err=>{
+
+  })
+})
+  }
   isShowParent:boolean=true;
   isShowNoApisCard=false;
   items=[
@@ -36,8 +49,8 @@ export class ApicardsComponent {
     this.isShowParent=false;
 this.router.navigate(['createapi'],{relativeTo: this.route})
   }
-  goToApiViewPage(){
+  goToApiViewPage(id:string){
     this.isShowParent=false;
-    this.router.navigate(['viewapi/overview'],{relativeTo:this.route})
+    this.router.navigate([`viewapi/${id}/overview`],{relativeTo:this.route})
   }
 }

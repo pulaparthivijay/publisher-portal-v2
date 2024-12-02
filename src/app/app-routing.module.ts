@@ -7,14 +7,16 @@ import { ViewapiComponent } from './viewapi/viewapi.component';
 import { ApiOverviewComponent } from './api-overview/api-overview.component';
 import { ParameterForwardingComponent } from './parameter-forwarding/parameter-forwarding.component';
 import { AuthComponent } from './auth/auth.component';
+import { DeploymentComponent } from './deployment/deployment.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
     {path:"createapi",component:CreateapiComponent},
-    {path:"viewapi",component:ViewapiComponent,children:[
+    {path:"viewapi/:id",component:ViewapiComponent,children:[
       {path:"overview",component:ApiOverviewComponent},
       {path:"parameter",component:ParameterForwardingComponent},
       {path:"auth",component:AuthComponent},
+      {path:"deployments",component:DeploymentComponent},
 
     ]}
   ]},

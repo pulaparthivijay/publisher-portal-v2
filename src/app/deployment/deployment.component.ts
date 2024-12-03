@@ -61,5 +61,16 @@ export class GatewayDialog {
   onNoClick(): void {
     this.dialogRef.close();
   }
+  // toggleSelection(card: any): void {
+  //   card.isSelected = !card.isSelected;
+  //   console.log('Selected Card ID:', card.isSelected ? card.id : 'None');
+  // }
+  selectCard(selectedCard: any): void {
+    // Deselect all cards
+    this.gatewayCards.forEach((card:any) => (card.isSelected = false));
+    // Select the clicked card
+    selectedCard.isSelected = true;
+    console.log('Selected Card ID:', selectedCard.id);
+  }
 
 }

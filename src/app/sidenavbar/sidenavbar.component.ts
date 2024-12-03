@@ -64,7 +64,7 @@ isSidebarExpanded = false;
       }
     });
   }
-  isCollapsed = true;
+  isCollapsed = false;
   toggleMenu() {
     console.log(this.sidebarView);
     

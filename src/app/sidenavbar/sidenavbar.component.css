@@ -76,5 +76,14 @@
   mat-sidenav-content{
     /* padding-top:20px; */
   }
-
+  .sidenav-open {
+    width: 250px; /* Width when sidenav is open */
+    transition: width 0.3s ease;
+  }
+  
+  .sidenav-collapsed {
+    width: 60px; /* Width when sidenav is collapsed */
+    transition: width 0.3s ease;
+  }
+  
   

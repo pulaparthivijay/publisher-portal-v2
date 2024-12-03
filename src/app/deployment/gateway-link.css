@@ -2,6 +2,21 @@
     padding: 20px;
     width:700px;
 }
-.gateway-card{
-    
-}
+/* .gateway-card{
+    height:150px;
+    border:1px solid lightgray;
+    border-radius: 20px;
+    padding:20px;
+} */
+.gateway-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .gateway-card.selected {
+    background-color: #e0f7fa;
+    border-color: #00796b;
+  }
+  

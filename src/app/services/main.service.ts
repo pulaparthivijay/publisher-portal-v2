@@ -35,4 +35,14 @@ userId=localStorage.getItem('userid')
       const options:any={headers:headers}
       return this.http.post(url,null,options)
     }
+
+
+    createEndpoint(body:any){
+      const url=urls.addEndpoint;
+      const headers={
+        'userId':this.userId
+      }
+      const options:any={headers:headers}
+      return this.http.post(url,body,options)
+    }
 }

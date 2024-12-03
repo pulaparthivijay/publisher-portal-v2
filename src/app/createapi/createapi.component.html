@@ -1,28 +1,86 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-center align-items-center create-api-card">
-        <div class="col-sm-4">
+        <div class="col-sm-8">
             <h2>Create API</h2>
-                <p>Create an API by providing endpoint, method and output</p>
-            <div class="create-card d-flex flex-column">
-                <div>
-                    <label for="apiname" class="form-label">API name</label>
-                    <input type="text" class="form-control" id="apiname">
-                </div>
-                <div class="row mt-3">
-                    <div class="col-sm-6">
-                        <label for="method" class="form-label">Method</label>
-                    <input type="text" class="form-control" id="method">
+            <p>Create an API by providing endpoint, method and output</p>
+            <form [formGroup]="formGroupEndPoint">
+                <div class="create-card d-flex flex-column">
+                    <div>
+                        <label for="apiname" class="form-label">API name</label>
+                        <input type="text" class="form-control" id="apiname" formControlName="apiName" placeholder="testapi">
                     </div>
-                    <div class="col-sm-6">
-                        <label for="outputencoding" class="form-label">Output_encoding</label>
-                    <input type="text" class="form-control" id="outputencoding">
+                    <div class="mt-3">
+                        <label for="contextpath" class="form-label">context path</label>
+                        <input type="text" class="form-control" id="contextpath" formControlName="endpoint" placeholder="/test/{var}">
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-6">
+                            <label for="method" class="form-label">Method</label>
+                            <!-- <input type="text" class="form-control" id="method" formControlName="method"> -->
+                            <select class="form-select" aria-label="Default select example" id="method"
+                                formControlName="method" >
+                                <option value="" disabled selected>Select Method</option>
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="PATCH">PATCH</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="outputencoding" class="form-label">Output encoding</label>
+                            <!-- <input type="text" class="form-control" id="outputencoding" formControlName="output"> -->
+                            <select class="form-select" aria-label="Default select example" id="outputencoding"
+                                formControlName="output_encoding">
+                                <option value="json">JSON object</option>
+                                <option value="json-collection">JSON array</option>
+                                <option value="fast-json">Fast JSON (EE)</option>
+                                <option value="negotiate">Negotiate content</option>
+                                <option value="string">String (text/plain)</option>
+                                <option value="no-op">No-op (just proxy)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <h3 class="mt-3">Backend Configuration</h3>
+                    <div>
+                        <label for="host" class="form-label">Host</label>
+                        <input type="text" class="form-control" id="host" formControlName="host">
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-sm-4">
+                            <label for="method" class="form-label">Method</label>
+                            <!-- <input type="text" class="form-control" id="method" formControlName="backendMethod"> -->
+                            <select class="form-select" aria-label="Default select example" id="method"
+                                formControlName="backendMethod">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="PATCH">PATCH</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="url" class="form-label">URL</label>
+                            <input type="text" class="form-control" id="url" formControlName="url_pattern">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="decodeas" class="form-label">Decode as</label>
+                            <!-- <input type="text" class="form-control" id="decodeas" formControlName="decodeAs"> -->
+                            <select class="form-select" aria-label="Default select example" id="decodeas"
+                                formControlName="encoding">
+                                <option value="json">JSON</option>
+                                <option value="xml">XML</option>
+                                <option value="rss">RSS</option>
+                                <option value="string">String</option>
+                                <option value="no-op">No-Op (Leave as is)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="btn btn-outline-primary" (click)="submitForm()">Create</button>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center mt-4">
-                    <button class="btn btn-outline-primary">Create</button>
-                </div>
-            </div>
-            
+            </form>
         </div>
     </div>
 </div>

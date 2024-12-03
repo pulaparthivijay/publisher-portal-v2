@@ -1,1 +1,71 @@
-<p>parameter-forwarding works!</p>
+<div class="container">
+
+    <form [formGroup]="parameterForm">
+
+        <div class="row gap-3 mb-3 p-2">
+            <div class="input-con d-flex gap-2 flex-column">
+                <div class="row align-items-end">
+                    <div class="col-sm-4">
+                        <label for="queryParams" class="form-label">Recoginised query string parameters &nbsp; <svg
+                                [matTooltip]=query_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                <path
+                                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                            </svg></label>
+                        <input type="text" class="form-control" id="queryParams" placeholder="parameter_name"
+                            formControlName="input_parameter">
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary" style="border-radius: 50%;" type="submit" (click)="addParameter()"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                            </svg></button>
+                    </div>
+                </div>
+                <div class="col-sm-12 d-flex">
+                    <button *ngFor="let parameter of parameterArray; let i = index" class="parameter-item">
+                        {{ parameter }}<mat-icon (click)="removeParameter(i)"
+                            class="d-flex align-items-center justify-content-end">close</mat-icon>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row gap-3 p-2">
+            <div class="input-con d-flex gap-2 flex-column">
+                <div class="row align-items-end">
+                    <div class="col-sm-4">
+                        <label for="headers" class="form-label">Headers passing to backend &nbsp; <svg
+                                [matTooltip]=header_tooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                <path
+                                    d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                            </svg></label>
+                        <input type="email" class="form-control" id="headers" placeholder="header_name"
+                            formControlName="input_header">
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="btn btn-primary" style="border-radius: 50%;" type="submit" (click)="addParameterHeader()"><svg
+                                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                            </svg></button>
+                    </div>
+                </div>
+                <div class="col-sm-12 d-flex">
+                    <button *ngFor="let parameter of parameterHeaderArray; let i = index" class="parameter-item">
+                        {{ parameter }}<mat-icon (click)="removeParameterHeader(i)"
+                            class="d-flex align-items-center justify-content-end">close</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

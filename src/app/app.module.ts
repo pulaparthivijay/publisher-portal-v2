@@ -27,6 +27,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { AuthInterceptor } from './auth.interceptor';
 import { DeploymentComponent } from './deployment/deployment.component';
 import { CreategatewayComponent } from './creategateway/creategateway.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -79,7 +81,9 @@ function initializeKeycloak(keycloak: KeycloakService){
     ReactiveFormsModule,
     MatMenuModule,
     MatIconModule,
-    HttpClientModule
+    HttpClientModule,
+    NgbModule,
+    MatTooltipModule
   ],
   providers: [KeycloakService,
     {

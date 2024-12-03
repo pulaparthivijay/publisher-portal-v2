@@ -18,16 +18,16 @@
                 <button class="btn btn-outline-primary" (click)="goToCreateApi()">Create API</button>
             </div>
         </div>
-        <div class="row pt-3">
+        <div class="row gap-2 pt-3">
             @for(item of endpointCards; track item.id){
-            <div class="col-sm-3">
+            <div class="col-sm custom">
                 <div class="api-card"(click)="goToApiViewPage(item.id)">
                     <div class="api-card-above d-flex justify-content-center align-items-center">
                         <img src="../../assets/images/Group.svg"/>
                     </div>
                     <div class="api-card-below">
-                        <button class="status-button">Created</button>
-                        <h2>{{item.endpoint}}</h2>
+                        <button class="status-button">{{item.status || 'created'}}</button>
+                        <h3>{{item.endpoint}}</h3>
                         <p>by admin</p>
                         <div class="d-flex">
                             <button class="deploy-btn d-flex align-items-center"><span class="d-flex align-items-center"><mat-icon class="material-symbols-outlined profile-icon-size">deployed_code</mat-icon></span><span>Deploy</span></button>

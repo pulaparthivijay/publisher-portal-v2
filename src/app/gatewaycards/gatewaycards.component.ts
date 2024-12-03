@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MainService } from '../services/main.service';
+import { Subscription } from 'rxjs';
+import { CommunicationService } from '../services/communication.service';
 
 @Component({
   selector: 'app-gatewaycards',
@@ -9,7 +11,8 @@ import { MainService } from '../services/main.service';
 })
 export class GatewaycardsComponent {
 
-  constructor(private router: Router, private route: ActivatedRoute, private mainSer: MainService) {
+  private subscription: Subscription;
+  constructor(private router: Router, private route: ActivatedRoute, private mainSer: MainService, private communicationSer:CommunicationService) {
 
     this.router.events.subscribe((event) => {
 
@@ -25,9 +28,20 @@ export class GatewaycardsComponent {
         }
       }
     });
+    this.subscription = this.communicationSer.gatewayCreated$.subscribe(
+      (updatedData: any) => {
+        console.log('Updated data received from child component!', updatedData);
+        this.loadGatewayCards();
+   
+     
+      }
+    );
   }
   gatewaysCards:any;
   ngOnInit() {
+    this.loadGatewayCards()
+  }
+  loadGatewayCards(){
     this.mainSer.getCards().subscribe({
       next: ((res: any) => {
         console.log(res);
@@ -48,7 +62,7 @@ export class GatewaycardsComponent {
   }
   goToGatewayViewPage(id: string) {
     this.isShowParent = false;
-    this.router.navigate([`viewapi/${id}/overview`], { relativeTo: this.route })
+    this.router.navigate([`viewgateway/${id}/dashboard`], { relativeTo: this.route })
   }
 }
 

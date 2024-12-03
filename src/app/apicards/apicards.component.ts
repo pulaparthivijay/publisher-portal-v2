@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MainService } from '../services/main.service';
+import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
+import { filter, Subscription } from 'rxjs';
+import { CommunicationService } from '../services/communication.service';
 
 @Component({
   selector: 'app-apicards',
   templateUrl: './apicards.component.html',
   styleUrl: './apicards.component.css'
 })
-export class ApicardsComponent {
+export class ApicardsComponent implements OnInit{
 
-  constructor( private router:Router, private route:ActivatedRoute,private mainSer:MainService){
+  private subscription: Subscription;
+
+  constructor( private router:Router, private route:ActivatedRoute,private mainSer:MainService,private readonly keycloak:KeycloakService,private communucationSer:CommunicationService){
 
     this.router.events.subscribe((event) => {
      
@@ -24,18 +29,58 @@ export class ApicardsComponent {
           this.isShowParent=false;
       }
     }});
+    this.subscription = this.communucationSer.apiCreated$.subscribe(
+      (updatedData: any) => {
+        console.log('Updated data received from child component!', updatedData);
+        this.loadCards(this.userId);
+   
+     
+      }
+    );
   }
   endpointCards:any;
+  userDetails:any;
+  userId:any=localStorage.getItem('userid');
   ngOnInit(){
-this.mainSer.getEndpointCards().subscribe({
-  next:((res:any)=>{
-    console.log(res);
-    this.endpointCards=res.endpointCards
-  }),
-  error:(err=>{
-
-  })
-})
+    if(this.userId){
+      this.loadCards(this.userId)
+    }else{
+      this.keycloak.keycloakEvents$.pipe(filter((e:any) => e.type === KeycloakEventType.OnAuthSuccess))
+      .subscribe({
+        next:()=>{
+    const token:any=this.keycloak.getKeycloakInstance().token
+          console.log(this.keycloak.getKeycloakInstance().token);
+       
+         
+          this.keycloak.getKeycloakInstance().loadUserInfo().then((user:any)=>{
+          console.log(user);
+           this.loadCards(user.sub)
+          })
+          console.log(this.keycloak.getKeycloakInstance().token);
+          console.log(this.keycloak.isLoggedIn());
+        }})
+    }
+// this.loadCards();
+// this.router.events.subscribe(event => {
+//   if (event instanceof NavigationEnd) {
+//     if (this.router.url === '/apis') {
+//       this.loadCards(this.userId); // Reload your data here
+//     }
+//   }
+// });
+}
+  
+  loadCards(userId:any){
+    this.mainSer.getEndpointCards(userId).subscribe({
+      next:((res:any)=>{
+        console.log(res);
+        this.endpointCards=res.endpointCards
+      }),
+      error:(err=>{
+    console.log(err);
+    
+      })
+    })
   }
   isShowParent:boolean=true;
   isShowNoApisCard=false;

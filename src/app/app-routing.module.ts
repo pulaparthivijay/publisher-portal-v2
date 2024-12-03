@@ -9,6 +9,8 @@ import { ParameterForwardingComponent } from './parameter-forwarding/parameter-f
 import { AuthComponent } from './auth/auth.component';
 import { DeploymentComponent } from './deployment/deployment.component';
 import { CreategatewayComponent } from './creategateway/creategateway.component';
+import { ViewgatewayComponent } from './viewgateway/viewgateway.component';
+import { GatewayDashboardComponent } from './gateway-dashboard/gateway-dashboard.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
@@ -23,6 +25,9 @@ const routes: Routes = [
   ]},
   {path:"gateways",component:GatewaycardsComponent,children:[
     {path:"creategateway",component:CreategatewayComponent},
+    {path:"viewgateway/:id", component:ViewgatewayComponent,children:[
+      {path:"dashboard",component:GatewayDashboardComponent}
+    ]}
   ]},
   { path: '', redirectTo: '/apis', pathMatch: 'full' }
   // {path:"gateways",component:GatewaycardsComponent}

@@ -8,7 +8,7 @@ import { urls } from '../../urls';
 export class MainService {
 
   constructor(private http:HttpClient) { }
-userId=localStorage.getItem('userid')
+
   getUserDetails(userId:any){
     const url=urls.getUser;
     const headers={
@@ -18,19 +18,21 @@ userId=localStorage.getItem('userid')
     return this.http.post(url,null,options)
   }
 
-  getEndpointCards(){
+  getEndpointCards(userId:any){
+    // const userId=localStorage.getItem('userid')
     const url=urls.getEndpointCards+"?pageNo=0&pageSize=10";
     const headers={
-      'userId':this.userId
+      'userId':userId
     }
     const options:any={headers:headers}
     return this.http.post(url,null,options)
   }
 
   getCards(){
-      const url=urls.getJsonCards+"?pageNo=0&pageSize=10";
+    const userId=localStorage.getItem('userid')
+      const url=urls.getGatewayCards+"?pageNo=0&pageSize=10";
       const headers={
-        'userId':this.userId
+        'userId':userId
       }
       const options:any={headers:headers}
       return this.http.post(url,null,options)
@@ -38,11 +40,32 @@ userId=localStorage.getItem('userid')
 
 
     createEndpoint(body:any){
+      const userId=localStorage.getItem('userid')
       const url=urls.addEndpoint;
       const headers={
-        'userId':this.userId
+        'userId':userId
       }
       const options:any={headers:headers}
+      return this.http.post(url,body,options)
+    }
+
+    linkEndpointWithGateway(endpointId:any,krakendId:any){
+      const url=urls.linkEndpoint+`?endpointId=${endpointId}&krakendId=${krakendId}`;
+      return this.http.post(url,null)
+    }
+    deployEndpoint(id:any){
+      const url=urls.deployFile+`?krakendId=${id}`
+      return this.http.get(url)
+    }
+    createGateway(body:any){
+      const userId=localStorage.getItem('userid')
+      const url=urls.saveGateway
+      const headers={
+        'userId':userId
+      }
+      const options:any={
+        headers:headers
+      }
       return this.http.post(url,body,options)
     }
 }

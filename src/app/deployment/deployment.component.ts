@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { MainService } from '../services/main.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-deployment',
@@ -21,7 +22,9 @@ endpointId:any;
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(GatewayDialog, {
-      // data: {},
+       data: {
+        endpointId:this.endpointId
+       },
       
     });
 
@@ -33,7 +36,7 @@ endpointId:any;
 }
 
 export interface DialogData {
- 
+ endpointId:string
 }
 @Component({
   selector: 'gateway-link',
@@ -56,6 +59,8 @@ export class GatewayDialog {
     })
   }
   ngOnInit(){
+    console.log(this.data);
+    
     this.getGatewayCards()
   }
   onNoClick(): void {
@@ -65,12 +70,41 @@ export class GatewayDialog {
   //   card.isSelected = !card.isSelected;
   //   console.log('Selected Card ID:', card.isSelected ? card.id : 'None');
   // }
+  krakendId:any
   selectCard(selectedCard: any): void {
     // Deselect all cards
     this.gatewayCards.forEach((card:any) => (card.isSelected = false));
     // Select the clicked card
     selectedCard.isSelected = true;
+    this.krakendId=selectedCard.id;
     console.log('Selected Card ID:', selectedCard.id);
   }
+
+  linkAndDeploy(){
+    
+      this.mainSer.linkEndpointWithGateway(this.data.endpointId,this.krakendId).pipe(
+        switchMap((firstApiResponse:any) => {
+          console.log('First API Response:', firstApiResponse);
+          // Use `firstApiResponse` if needed in the second API call
+          return this.mainSer.deployEndpoint(this.krakendId);
+        })
+      ).subscribe({
+        next: (secondApiResponse:any) => {
+          console.log('Second API Response:', secondApiResponse);
+          this.dialogRef.close();
+        },
+        error: (error:any) => {
+          console.error('Error occurred:', error);
+        },
+      });
+    
+  }
+  // callFirstApi() {
+  //   return this.http.get('https://api.example.com/first-endpoint');
+  // }
+
+  // callSecondApi() {
+  //   return this.http.get('https://api.example.com/second-endpoint');
+  // }
 
 }

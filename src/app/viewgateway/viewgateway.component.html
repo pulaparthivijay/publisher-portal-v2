@@ -1,0 +1,65 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 sidemenu">
+            <mat-nav-list>
+                <a mat-list-item routerLink="dashboard" routerLinkActive="active">
+                  <div class="d-flex align-items-center">
+                      <span class="mat-icon-styles">
+                          <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="settings"></mat-icon>
+                      </span>
+                      <span class="anchor-head">Dashboard</span>
+                  </div>
+                  
+              </a>
+                <a mat-list-item routerLink="service" routerLinkActive="active">
+                  <div class="d-flex align-items-center">
+                      <span class="mat-icon-styles">
+                          <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="gate"></mat-icon>
+                      </span>
+                      <span class="anchor-head">Service settings</span>
+                  </div>
+              </a>
+                <a mat-list-item routerLink="httpsecurity" routerLinkActive="active">
+                  <div class="d-flex align-items-center">
+                      <span class="mat-icon-styles">
+                          <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="add_moderator"></mat-icon>
+                      </span>
+                      <span class="anchor-head">Http Security</span>
+                  </div>
+                </a>
+                <a mat-list-item routerLink="apimonetize">
+                  <div class="d-flex align-items-center">
+                      <span class="mat-icon-styles">
+                          <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="speed"></mat-icon>
+                      </span>
+                      <span class="anchor-head">API Monetization</span>
+                  </div>
+                </a>
+                <a mat-list-item routerLink="telemetry">
+                  <div class="d-flex align-items-center">
+                      <span class="mat-icon-styles">
+                          <mat-icon aria-hidden="false" aria-label="Example home icon" class="material-symbols-outlined " fontIcon="policy"></mat-icon>
+                      </span>
+                      <span class="anchor-head">Telemetry</span>
+                  </div>
+                </a>
+                
+              </mat-nav-list>
+        </div>
+        <div class="col-sm-10 p-0">
+            <!-- <div class="about-api-card">
+                <div class="row">
+                    <div class="col-sm-3 about-name-section">
+                        <h3>Pizza Shack</h3>
+                        <p>Created by: Admin</p>
+                    </div>
+                    <div class="col-sm-3 about-name-section">
+                        <h3>Draft State</h3>
+                        <p>State</p>
+                    </div>
+                </div>
+            </div> -->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

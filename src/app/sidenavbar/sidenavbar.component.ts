@@ -55,7 +55,6 @@ isSidebarExpanded = false;
     // console.log(this.sidebarView);
     // console.log(this.isCollapsed);
     
-    
     this.observer.observe(['(max-width: 800px)']).subscribe((screenSize) => {
       if(screenSize.matches){
         this.isMobile = true;

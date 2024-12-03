@@ -1,1 +1,27 @@
-<p>creategateway works!</p>
+<div class="container-fluid">
+    <div class="d-flex justify-content-center align-items-center create-api-card">
+        <div class="col-sm-8">
+            <h2>Create Gateway</h2>
+            <!-- <p>Create an API by providing endpoint, method and output</p> -->
+            <form [formGroup]="formGroupGateway">
+                <div class="create-card d-flex flex-column">
+                    <div>
+                        <label for="gatewayName" class="form-label">Gateway Name</label>
+                        <input type="text" class="form-control" id="gatewayName" formControlName="gatewayName">
+                    </div>
+                    <div class="mt-3">
+                        <label for="port" class="form-label">Port</label>
+                        <input type="number" class="form-control" id="port" formControlName="port">
+                    </div>
+                    <div class="mt-3">
+                        <label for="host" class="form-label">host</label>
+                        <input type="text" class="form-control" id="host" formControlName="host">
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button class="btn btn-outline-primary" (click)="submitForm()">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

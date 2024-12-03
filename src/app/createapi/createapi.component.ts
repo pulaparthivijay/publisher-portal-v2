@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { MainService } from '../services/main.service';
+import { Router } from '@angular/router';
+import { CommunicationService } from '../services/communication.service';
 
 @Component({
   selector: 'app-createapi',
@@ -15,7 +17,7 @@ export class CreateapiComponent {
   receivedData: any;
 
 
-  constructor(private formBuilder: FormBuilder,private mainService:MainService) {
+  constructor(private formBuilder: FormBuilder,private mainService:MainService,private router:Router,private communicationSer:CommunicationService) {
     this.formGroupEndPoint = this.formBuilder.group({
       apiName: [null],
       endpoint: [null, [Validators.required]],
@@ -24,7 +26,8 @@ export class CreateapiComponent {
       host: [null],
       backendMethod: [null],
       encoding: [null],
-      url_pattern: [null]
+      url_pattern: [null],
+      is_collection:[false]
     })
   }
 
@@ -45,6 +48,7 @@ export class CreateapiComponent {
             "host": [
               this.formGroupEndPoint.get("host")?.value
             ],
+            "is_collection": this.formGroupEndPoint?.get("is_collection")?.value,
 
           }
         ]
@@ -54,6 +58,8 @@ export class CreateapiComponent {
       this.mainService.createEndpoint(createApiBody).subscribe({
         next:(res =>{
             console.log(res);
+            this.communicationSer.emitApiCreated(res)
+            this.router.navigate(['apis'],{ replaceUrl: true })
         }),
         error:(err=>{
 

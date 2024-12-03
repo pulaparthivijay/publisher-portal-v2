@@ -1,6 +1,6 @@
 const host="http://localhost:8082"
 export const urls={
-    saveEndpoint:host+"/krakend/saveKrakendJson",
+    saveGateway:host+"/krakend/saveKrakendJson",
    // addEndpoint:host+"/krakend/addendpoints",
     updateEndpoint:host+"/krakend/updateEndpoint",
     getEndpointById:host+"/krakend/getKrakendJson",
@@ -10,5 +10,6 @@ export const urls={
     getUser:host+"/user/getUser",
     deployFile:host+"/krakend/krakendFile",
     getEndpointCards:host+"/krakend/endpoint/getEndpointCards",
-    addEndpoint:host+"/krakend/endpoint/addendpoint"
+    addEndpoint:host+"/krakend/endpoint/addendpoint",
+    linkEndpoint:host+"/krakend/linkEndpoint"
 }

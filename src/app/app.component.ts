@@ -25,6 +25,7 @@ const token:any=this.keycloak.getKeycloakInstance().token
       console.log(user);
       this.getUserDetails(user.sub)
       localStorage.setItem('userid',user.sub)
+      // this.router.navigate(['apis']);
       })
       console.log(this.keycloak.getKeycloakInstance().token);
       console.log(this.keycloak.isLoggedIn());

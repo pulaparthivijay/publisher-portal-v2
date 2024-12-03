@@ -8,7 +8,7 @@
             <div class="col-sm-5 d-flex align-items-center justify-content-between">
                 <input type="search" class="form-control input-search"/>
                 <img src="../../assets/images/Frame 7.svg"/>
-                <mat-icon class="material-symbols-outlined profile-icon-size">account_circle</mat-icon>
+                <mat-icon class="material-symbols-outlined profile-icon-size"(click)="openDialog()">account_circle</mat-icon>
             </div>
        
     </mat-toolbar>
@@ -19,7 +19,7 @@
         <h1>Responsive Material Sidenavigation</h1>
       </mat-toolbar> -->
       <mat-sidenav-container autosize class="example-sidenav-container">
-        <mat-sidenav [opened]="true" [mode]=sidebarView class="sidenav-bg">
+        <mat-sidenav [opened]="true" mode='side' class="sidenav-bg">
           <mat-nav-list>
             <!-- <a mat-list-item>
                 <span class="entry">

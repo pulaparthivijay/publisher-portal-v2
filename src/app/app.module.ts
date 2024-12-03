@@ -27,8 +27,10 @@ import { KeycloakService } from 'keycloak-angular';
 import { AuthInterceptor } from './auth.interceptor';
 import { DeploymentComponent } from './deployment/deployment.component';
 import { CreategatewayComponent } from './creategateway/creategateway.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { ViewgatewayComponent } from './viewgateway/viewgateway.component';
+import { GatewayDashboardComponent } from './gateway-dashboard/gateway-dashboard.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -69,7 +71,9 @@ function initializeKeycloak(keycloak: KeycloakService){
     ParameterForwardingComponent,
     AuthComponent,
     DeploymentComponent,
-    CreategatewayComponent
+    CreategatewayComponent,
+    ViewgatewayComponent,
+    GatewayDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -82,7 +86,7 @@ function initializeKeycloak(keycloak: KeycloakService){
     MatMenuModule,
     MatIconModule,
     HttpClientModule,
-    NgbModule,
+    // NgbModule,
     MatTooltipModule
   ],
   providers: [KeycloakService,

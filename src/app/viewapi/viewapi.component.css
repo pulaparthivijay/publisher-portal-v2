@@ -21,4 +21,22 @@
   }
   .about-name-section{
     border-right:1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
   }
+
+  .img-bg{
+    background-color: rgba(6, 70, 122, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .icon-support h3, p{
+    margin: 0px;
+  }
+
+  

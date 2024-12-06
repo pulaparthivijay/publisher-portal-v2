@@ -1,1 +1,126 @@
-<p>auth works!</p>
+<div class="container">
+    <form [formGroup]="authForm">
+        <div class="row">
+            <h3>Authentication</h3>
+        </div>
+
+        <div class="row p-2">
+            <div class="input-con d-flex gap-2 flex-column">
+                <div class="col-sm-12 ">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="OAuth"
+                            formControlName="isOAuthActive">
+                        <label class="form-check-label" for="OAuth">
+                            OAuth &nbsp; <svg
+                            [matTooltip]=OAuthTooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                            <path
+                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        </svg>
+                        </label>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+                @if (authForm.value.isOAuthActive) {
+                <div class="row">
+                    <div class="col-sm-4">
+                        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Color selection">
+                            @for (chip of availableColors; track chip) {
+                            <mat-chip-option selected [color]="chip.color">{{chip.name}}</mat-chip-option>
+                            }
+                        </mat-chip-listbox>
+                    </div>
+
+                </div>
+                <div class="col-sm-12 d-flex justify-content-end">
+                    <button class="btn btn-primary">Create New</button>
+                </div>
+                }
+
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="input-con d-flex gap-2 flex-column">
+                <div class="col-sm-12 ">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="tokenSigning"
+                            formControlName="isTokenSiginig">
+                        <label class="form-check-label" for="tokenSigning">
+                            Token Signing &nbsp; <svg
+                            [matTooltip]=tokenSignTooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                            <path
+                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        </svg>
+                        </label>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                @if (authForm.value.isTokenSiginig) {
+                <div class="row">
+                    <div class="col-sm-4">
+                        <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Color selection">
+                            @for (chip of availableColors; track chip) {
+                            <mat-chip-option selected [color]="chip.color">{{chip.name}}</mat-chip-option>
+                            }
+                        </mat-chip-listbox>
+                    </div>
+                </div>
+                <div class="col-sm-12 d-flex justify-content-end">
+                    <button class="btn btn-primary">Create New</button>
+                </div>
+                }
+
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="input-con d-flex gap-2 flex-column">
+                <div class="col-sm-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="basicAuth"
+                            formControlName="isBasicAuthActive">
+                        <label class="form-check-label" for="basicAuth">
+                            Basic Authentication <svg
+                            [matTooltip]=basicAuthTooltip xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                            <path
+                                d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        </svg>
+                        </label>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+                @if (authForm.value.isBasicAuthActive) {
+                <div class="col-sm-12 description">
+                    <p>Basic authentication is now required by this endpoint. You can change the path of the .htpasswd
+                        file under HTTP Security</p>
+                </div>
+                }
+            </div>
+        </div>
+
+
+        <div class="row p-2">
+            <div class="input-con d-flex gap-1 flex-column">
+                <div class="api-key-heading">
+                    <h4>API key Authentication</h4> 
+                </div>
+                <div>
+                    <p class="description">API keys are not enabled yet.</p>
+                </div>
+                <div>
+                    <a href="#">Enable and configure API keys</a>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

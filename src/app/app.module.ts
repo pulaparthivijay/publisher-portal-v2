@@ -36,6 +36,10 @@ import { BackendComponent } from './backend/backend.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatChipsModule} from '@angular/material/chips';
+import { ThrottlingComponent } from './throttling/throttling.component';
+import { PoliciesComponent } from './policies/policies.component';
+import { ResponseManipulationComponent } from './response-manipulation/response-manipulation.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -79,7 +83,10 @@ function initializeKeycloak(keycloak: KeycloakService){
     CreategatewayComponent,
     ViewgatewayComponent,
     GatewayDashboardComponent,
-    BackendComponent
+    BackendComponent,
+    ThrottlingComponent,
+    PoliciesComponent,
+    ResponseManipulationComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +104,11 @@ function initializeKeycloak(keycloak: KeycloakService){
     NgbModule,
     MatExpansionModule,
     MatSlideToggleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatChipsModule,
+    MatExpansionModule,
+    MatSlideToggleModule
+    
   ],
   providers: [KeycloakService,
     {

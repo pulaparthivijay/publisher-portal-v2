@@ -12,6 +12,9 @@ import { CreategatewayComponent } from './creategateway/creategateway.component'
 import { ViewgatewayComponent } from './viewgateway/viewgateway.component';
 import { GatewayDashboardComponent } from './gateway-dashboard/gateway-dashboard.component';
 import { BackendComponent } from './backend/backend.component';
+import { ThrottlingComponent } from './throttling/throttling.component';
+import { PoliciesComponent } from './policies/policies.component';
+import { ResponseManipulationComponent } from './response-manipulation/response-manipulation.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
@@ -21,7 +24,11 @@ const routes: Routes = [
       {path:"parameter",component:ParameterForwardingComponent},
       {path:"auth",component:AuthComponent},
       {path:"backends",component:BackendComponent},
+      {path:"throttling",component:ThrottlingComponent},
       {path:"deployments",component:DeploymentComponent},
+      {path:"policies",component:PoliciesComponent},
+      {path:"response",component:ResponseManipulationComponent},
+      
 
     ]}
   ]},

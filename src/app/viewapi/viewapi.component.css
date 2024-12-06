@@ -1,7 +1,11 @@
 .sidemenu{
     background: linear-gradient(to right,rgba(5, 35, 48, 1),rgba(10, 40, 52, 0.93));
     /* min-width:220px !important; */
-    height:90vh;
+    /* height:90vh; */
+    min-height: 100vh;
+  }
+  .side-menu mat-nav-list{
+    position: fixed !important;
   }
   .anchor-head{
     color:white;

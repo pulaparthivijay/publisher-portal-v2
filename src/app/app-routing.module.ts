@@ -11,6 +11,7 @@ import { DeploymentComponent } from './deployment/deployment.component';
 import { CreategatewayComponent } from './creategateway/creategateway.component';
 import { ViewgatewayComponent } from './viewgateway/viewgateway.component';
 import { GatewayDashboardComponent } from './gateway-dashboard/gateway-dashboard.component';
+import { BackendComponent } from './backend/backend.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
@@ -19,6 +20,7 @@ const routes: Routes = [
       {path:"overview",component:ApiOverviewComponent},
       {path:"parameter",component:ParameterForwardingComponent},
       {path:"auth",component:AuthComponent},
+      {path:"backends",component:BackendComponent},
       {path:"deployments",component:DeploymentComponent},
 
     ]}

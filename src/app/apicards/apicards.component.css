@@ -20,6 +20,8 @@
     border-radius:10px;
     border:1px solid lightgray;
     cursor: pointer;
+    width:290px;
+    
     /* padding:20px; */
 }
 .api-card-above{
@@ -69,4 +71,15 @@
 .custom {
     flex: 0 0 19%; /* Each card takes up 19% of the row */
     max-width: 19%; /* Maintain 5 cards per row */
+}
+.row-size{
+    padding-left:0px !important;
+    padding-right:0px !important;
+}
+.endpoint-name{
+    font-size:20px;
+}
+.createdBy{
+    color:rgba(0, 0, 0, 0.6);
+    font-size:14px;
 }

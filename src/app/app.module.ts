@@ -31,6 +31,11 @@ import { CreategatewayComponent } from './creategateway/creategateway.component'
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { ViewgatewayComponent } from './viewgateway/viewgateway.component';
 import { GatewayDashboardComponent } from './gateway-dashboard/gateway-dashboard.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BackendComponent } from './backend/backend.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -73,7 +78,8 @@ function initializeKeycloak(keycloak: KeycloakService){
     DeploymentComponent,
     CreategatewayComponent,
     ViewgatewayComponent,
-    GatewayDashboardComponent
+    GatewayDashboardComponent,
+    BackendComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +93,11 @@ function initializeKeycloak(keycloak: KeycloakService){
     MatIconModule,
     HttpClientModule,
     // NgbModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgbModule,
+    MatExpansionModule,
+    MatSlideToggleModule,
+    MatCheckboxModule
   ],
   providers: [KeycloakService,
     {

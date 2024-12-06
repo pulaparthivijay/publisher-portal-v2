@@ -68,4 +68,17 @@ export class MainService {
       }
       return this.http.post(url,body,options)
     }
+    addBackend(endpointId:any,body:any){
+      const url=urls.addbackend+`?endpointId=${endpointId}`
+      return this.http.post(url,body)
+    }
+    getEndpoint(endpointId:any){
+      const url=urls.getEndpoint+`?endpointId=${endpointId}`
+      return this.http.get(url)
+    }
+    
+    updateBackend(backendId:any,body:any){
+      const url=urls.updateBackend+`?backendId=${backendId}`
+      return this.http.post(url,body)
+    }
 }

@@ -41,6 +41,38 @@ export class BackendComponent {
   interval_tooltip="Time window where this circuit breaker counts errors";
   renaming_tooltip="You can rename any attributes returned by the backend and use a name more convenient for you."
   timeout_tooltip="Time to wait before stressing again a failing backend";
+  logStatusChange_tooltip="Write in the logs when the circuit changes its state (open/closed).";
+  maxRateLimit_tooltip="Maximum requests you want to let this backend handle in the specified time (every)";
+  everyThrot_tooltip="Time window where this rate limit applies.";
+  capacityThrot_tooltip="Recommended value capacity=max_rate. A token bucket algorithm is used with a bucket capacity == tokens added per second. KrakenD is able to allow bursting on the request rates.";
+  clientId_tooltip="The Client ID as it will provided to the Auth server";
+  clientSecret_tooltip="The Client secret as it will provided to the Auth server";
+  tokenUrl_tooltip="The URL where the negotiation of the token will happen";
+  scopes_tooltip="Comma separated list of scopes needed.";
+  objEndpointParameter_tooltip="You can rename any attributes returned by the backend and use a name more convenient for you."
+  audienceAuth_tooltip="The audience in GCP looks like an URL, and contains the destination service you will ask a token for. Most of the times this URL will match exactly with the host entry. Credentials are taken from the environment variable GOOGLE_APPLICATION_CREDENTIALS, which Cloud Run passes automatically."
+  user_tooltip="The proxy address used to forward the traffic. The address must contain the protocol and the port."
+  password_tooltip="The proxy address used to forward the traffic. The address must contain the protocol and the port."
+  reqpolicies_tooltip="Policy. Example: hasQuerystring('q')";
+  reqErrCode_tooltip="Returned status on violated policy";
+  reqErrBody_tooltip="Empty string to return the validation error, or write a string with the error response body. You can add escaped JSON, XML, etc in the string and add a Content-Type."
+  reqContentType_tooltip="The Content-Type header you'd like to send with the error response. When unset, uses text/plain by default.";
+  resPolicies_tooltip="Policy. Example: hasQuerystring('q')";
+  resErrCode_tooltip="Returned status on violated policy";
+  resErrBody_tooltip="mpty string to return the validation error, or write a string with the error response body. You can add escaped JSON, XML, etc in the string and add a Content-Type."
+  resErrContentType_tooltip="The Content-Type header you'd like to send with the error response. When unset, uses text/plain by default."
+  jwtPolicies_tooltip="Policy. Example:has(JWT.user_id) && 'legal' == JWT.department";
+  jwtDebug_tooltip="Evaluation results are printed in the console.";
+  autoJoinPolicies_tooltip="All policies concatenate with an AND operation to evaluate a single expression. Faster, but harder to debug.";
+  disableMacros_tooltip="Advanced macros can be disabled when not used for a faster evaluation.";
+  errMessage_tooltip="The error message you want to show when the validation fails. Leave it empty to show the JSON-schema validation error.";
+  errStatusCode_tooltip="The HTTP status code you want to set back in the response."
+  bodyEditConn_tooltip="The response body you will return to the end-user. You can introduce the variables.resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx,.req_params.Xxx, .req_headers.xxx, .req_querystring.xxx, .req_path";
+  contentTypeConn_tooltip="The Content-Type that you are coding in the template. Defaults to application/json";
+  enableDebugConn_tooltip="shows useful information in the logs with DEBUG level about the input received and the body generated. Do not enable in production."
+  pathConn_tooltip="The Content-Type that you are coding in the template. Defaults to application/json";
+  connectWebProxy_tooltip="The proxy address used to forward the traffic. The address must contain the protocol and the port."
+  redirectConn_tooltip="Check if you don't want KrakenD to follow redirects and let <br> the consuming user to receive the 30x status code."
 
   panelOpenState = false;
   mainUrl:any;
@@ -79,7 +111,7 @@ export class BackendComponent {
   amqpRoutingKeysArray: any[] = [];
 
   objectMapConnect: Map<string, string> = new Map();
-  objectMapConnect1: Map<string, string> = new Map();
+  objectMapConnectRestToGraph: Map<string, string> = new Map();
 
   jsonData = {
     "students": [
@@ -109,8 +141,21 @@ export class BackendComponent {
     // response manipulation
     this.formArray.controls.forEach((_, index) => {
       this.applyDynamicLogic(index);
+      // this.patchRenamingObj(index,)
     });
   }
+  // patchRenamingObj(formGroupIndex: number, renamingObj: Record<string, string>) {
+  //   // Convert renamingObj (object) to array of key-value pairs
+  //   const mapArray = Object.entries(renamingObj);
+  
+  //   // Update the objectMap
+  //   this.objectMap.clear(); // Clear existing map to avoid duplicates
+  //   mapArray.forEach(([key, value]) => this.objectMap.set(key, value));
+  
+  //   // Patch the mapArray to the form control
+  //   this.getFormGroup(formGroupIndex).get('objectMapValue')?.setValue(mapArray);
+  // }
+  
   applyDynamicLogic(index: number): void {
     const formGroup = this.getFormGroup(index);
   
@@ -175,7 +220,7 @@ endpointId:any;
   }
 
   initializeFormGroups() {
-    this.items.forEach((item) => {
+    this.items.forEach((item,index) => {
       console.log(item);
       
       const group = this.fb.group({
@@ -197,7 +242,7 @@ endpointId:any;
       debug:[item?.extra_config?.['modifier/body-generator']?.debug],
       path:[item?.extra_config?.['modifier/body-generator']?.path],
       martianDslTextarea:[item?.extra_config?.['modifier/martian']],
-      host:[item?.host ?? []],
+      host:[''],
       hostArrayValue:[item?.host ?? []],
 
       // response manipulation
@@ -208,9 +253,9 @@ endpointId:any;
       deniedAttributesArrValue:[item?.deny],
       allowedAttributesArrValue:[item?.allow],
       wrappingGroup:[item?.group],
-      originalObj:[item.originalObj],
-      renamedObj:[item.renamedObj],
-      objectMapValue:[item.objectMapValue],
+      originalObj:[''],
+      renamedObj:[''],
+      objectMapValue:[[]],
       isCachingActive:[!!item?.extra_config?.['qos/http-cache']],
       isSharedCacheActive:[item?.extra_config?.['qos/http-cache']?.shared], 
       AdvResManipulationActive:[item?.extra_config?.["modifier/jmespath"]],
@@ -235,7 +280,7 @@ endpointId:any;
       operationType:[item.operationType],
       flatmapTargetObj:[item.flatmapTargetObj],
       flatmapOriginalObj:[item.flatmapOriginalObj],
-      flatmapFilterArr:[item.flatmapFilterArr],
+      flatmapFilterArr:[[]],
       martianActive:[item.martianActive],
       martian:[item.martian],
       // throttling
@@ -261,9 +306,9 @@ endpointId:any;
       isAuthActive:[!!item?.extra_config?.["auth/client-credentials"]],
       isGoogleCloudActive:[item?.extra_config?.["auth/gcp"]],
       isNtlmAuthActive:[item?.extra_config?.["auth/ntlm"]],
-      // objectMapValueAuth:[item.objectMapValueAuth],
-      // endpointValue:[item.endpointValue],
-      // endpointKey:[item.endpointKey],
+      objectMapValueAuth:[[]],
+      endpointValue:[''],
+      endpointKey:[''],
       // policies
       isSecPolicyActive: [!!item?.extra_config?.["security/policies"]],
       isResSchValidatorActive: [!!item?.extra_config?.["plugin/req-resp-modifier"]?.name.includes("response-schema-validator")],
@@ -281,9 +326,9 @@ endpointId:any;
       disableMacros: [item?.extra_config?.["security/policies"]?.disable_macros],
       resSchemaValErrorMsg: [item.resSchemaValErrorMsg],
       resSchemaValErrorStCode: [item.resSchemaValErrorStCode],
-      secReqPolicyArrayValue: [item?.extra_config?.["security/policies"]?.req?.policies],
-      secResPolicyArrayValue: [item?.extra_config?.["security/policies"]?.resp?.policies],
-      jwtReqPolicyArrayValue: [item?.extra_config?.["security/policies"]?.jwt?.policies],
+      secReqPolicyArrayValue: [item?.extra_config?.["security/policies"]?.req?.policies ??[]],
+      secResPolicyArrayValue: [item?.extra_config?.["security/policies"]?.resp?.policies ??[]],
+      jwtReqPolicyArrayValue: [item?.extra_config?.["security/policies"]?.jwt?.policies??[]],
       responseSchema: [item.responseSchema],
       // connectivity options
       isRestToSoapActive:[!!item?.extra_config?.["backend/soap"]],
@@ -306,7 +351,7 @@ endpointId:any;
       donotFollowRedirectsForm: [item?.extra_config?.["backend/http/client"]?.no_redirect],
    
       objectMapValueConnect: [item.objectMapValueConnect],
-      objectMapValueConnect1: [item.objectMapValueConnect1],
+      objectMapValueConnectRestToGraph: [item.objectMapValueConnectRestToGraph],
 
       restTogrpcReqNamingConventionForm: [item?.extra_config?.["backend/grpc"]?.request_naming_convention],
       restTogrpcResNamingConventionForm: [item?.extra_config?.["backend/grpc"]?.response_naming_convention],
@@ -325,8 +370,8 @@ endpointId:any;
       restTographQLInlineQueryForm:[item?.extra_config?.["backend/graphql"]?.query],
       restToGraphqlOpNameForm: [item?.extra_config?.["backend/graphql"]?.operationName],
       restTographQLQueryPathForm:[item?.extra_config?.["backend/graphql"]?.query_path],
-      // restTographQLVariable: [item.restTographQLVariable],
-      // restTographQLValue: [item.restTographQLValue],
+      restTographQLVariable: [item?.restTographQLVariable],
+      restTographQLValue: [item?.restTographQLValue],
       
     
       amqpConsumerQueueNameForm: [item?.extra_config?.["backend/amqp/consumer"]?.name],
@@ -358,6 +403,22 @@ endpointId:any;
       amqpProducerDurableForm: [item?.extra_config?.["backend/amqp/producer"]?.durable]
       });
       this.formArray.push(group);
+      this.hostArray.push(item.host??[])
+      this.parameterArraySecReqPolicy.push(item?.extra_config?.["security/policies"]?.req?.policies ??[]),
+      this.parameterArraySecResPolicy.push(item?.extra_config?.["security/policies"]?.resp?.policies??[]),
+      this.parameterArrayJwtValReqPolicy.push(item?.extra_config?.["security/policies"]?.jwt?.policies??[])
+      this.amqpRoutingKeysArray.push(item?.extra_config?.["backend/amqp/consumer"]?.routing_key ??[]),
+      this.objectMaps.push(new Map<string, string>());
+      this.patchRenamingObj(index, item?.mapping);
+      this.objectMapsAuth.push(new Map<string, string>());
+      this.patchRenamingAuthObj(index, item?.extra_config?.["auth/client-credentials"]?.endpoint_params);
+      this.objectMapsConnect.push(new Map<string, string>());
+      this.patchRenamingConnectObj(index, item?.extra_config?.["backend/grpc"]?.input_mapping);
+      this.objectMapsConnectRestToGraph.push(new Map<string, string>());
+      this.patchRenamingConnectRestToGraphObj(index, item?.extra_config?.["backend/graphql"]?.variables);
+      // this.faltMapArr[index].push(item?.extra_config?.proxy?.flatmap_filter)
+      this.faltMapArr.push(new Array<any>());
+      this.patchFlatMapArray(index,item?.extra_config?.proxy?.flatmap_filter ??[])
     });
   }
 showBackend:boolean=true;
@@ -377,7 +438,7 @@ showBackend:boolean=true;
       decodeAs: null,
       staticUrl: null,
       directory_Listing: false,
-      bodyEditor: 'bodyeditor',
+      bodyEditor: '',
       template: '',
       contentType: '',
       debug: false,
@@ -406,7 +467,7 @@ showBackend:boolean=true;
       expression:'',
 
 
-      bodyEditorResponse:'bodyeditor',
+      bodyEditorResponse:'',
       templateResponse:'',
       contentTypeResponse:'',
       debugResponse:false,
@@ -493,7 +554,7 @@ showBackend:boolean=true;
       donotFollowRedirectsForm: false,
    
       objectMapValueConnect: [],
-      objectMapValueConnect1: [],
+      objectMapValueConnectRestToGraph: [],
 
       restTogrpcReqNamingConventionForm: null,
       restTogrpcResNamingConventionForm: null,
@@ -524,7 +585,7 @@ showBackend:boolean=true;
       amqpConsumerPrefetchCntForm: null,
       amqpConsumerDurableForm: null,
       amqpConsumerNoLocalForm: null,
-      amqpRoutingKeysArray:false, 
+      amqpRoutingKeysArray:null, 
 
       awsLambdaFunctionNameForm: null,
       awsLambdaFunctionParamNameForm: null,
@@ -562,7 +623,7 @@ showBackend:boolean=true;
       decodeAs:[null],
       staticUrl:[null],
       directory_Listing:[false],
-      bodyEditor:['bodyeditor'],
+      bodyEditor:[''],
       template:[''],
       contentType:[''],
       debug:[false],
@@ -590,7 +651,7 @@ showBackend:boolean=true;
       expression:[''],
 
 
-      bodyEditorResponse:['bodyeditor'],
+      bodyEditorResponse:[''],
       templateResponse:[''],
       contentTypeResponse:[''],
       debugResponse:[false],
@@ -667,7 +728,7 @@ showBackend:boolean=true;
       isPublicPublisherActive:[false],
       isAMQPproducerActive:[false],
     
-      bodyEditorConnect:['bodyeditor'],
+      bodyEditorConnect:[''],
       templateConnect:[''],
       contentTypeConnect:[''],
       debugConnect:[false],
@@ -677,7 +738,7 @@ showBackend:boolean=true;
       donotFollowRedirectsForm: [false],
    
       objectMapValueConnect: [[]],
-      objectMapValueConnect1: [[]],
+      objectMapValueConnectRestToGraph: [[]],
 
       restTogrpcReqNamingConventionForm: [null],
       restTogrpcResNamingConventionForm: [null],
@@ -704,7 +765,7 @@ showBackend:boolean=true;
       amqpConsumerPrefetchCntForm: [null],
       amqpConsumerDurableForm: [null],
       amqpConsumerNoLocalForm: [null],
-      amqpRoutingKeysArray:[false], 
+      amqpRoutingKeysArray:[null], 
       awsLambdaFunctionNameForm: [null],
       awsLambdaFunctionParamNameForm: [null],
       awsLambdaRegionForm: [null],
@@ -731,7 +792,15 @@ const renamingObj = data?.objectMapValue?.reduce((acc:any, [key, value]:any) => 
   acc[key] = value;
   return acc;
 }, {});
-const inputMapObj = data?.objectMapValue?.reduce((acc:any, [key, value]:any) => {
+const inputMapObjConnectRestToGrpc = data?.objectMapValueConnect?.reduce((acc:any, [key, value]:any) => {
+  acc[key] = value;
+  return acc;
+}, {});
+const inputMapObjConnectRestToGraphql = data?.objectMapValueConnectRestToGraph?.reduce((acc:any, [key, value]:any) => {
+  acc[key] = value;
+  return acc;
+}, {});
+const endpointMapObj=data?.objectMapValueAuth?.reduce((acc:any, [key, value]:any) => {
   acc[key] = value;
   return acc;
 }, {});
@@ -777,9 +846,7 @@ const backendBody=
           "shared": data.isSharedCacheActive
         }}),
         ...(data?.isAuthActive &&{"auth/client-credentials": {
-      "endpoint_params": {
-        "5t": "ji"
-      },
+      "endpoint_params": endpointMapObj,
       ...(data?.clientId &&{"client_id": data?.clientId}),
       ...(data?.clientSecret &&{"client_secret": data?.clientSecret}),
       ...(data?.tokenUrl &&{"token_url": data?.tokenUrl}),
@@ -819,7 +886,7 @@ const backendBody=
         ...(data?.isRestToGraphqlActive &&{"backend/graphql": {
           ...(data?.restTographQLOpTypeForm &&{"type": data?.restTographQLOpTypeForm}),
           ...(data?.restTographQLInlineQueryForm &&{"query": data?.restTographQLInlineQueryForm}),
-          "variables": {},
+          "variables": inputMapObjConnectRestToGraphql,
       ...(data?.restToGraphqlOpNameForm &&{"operationName": data?.restToGraphqlOpNameForm}),
       ...(data?.restTographQLQueryPathForm &&{"query_path": data?.restTographQLQueryPathForm}),
         }}),
@@ -831,7 +898,7 @@ const backendBody=
           "path": data?.pathRestToSoapForm
         }}),
         ...(data?.isrestToGRPCActive &&{"backend/grpc": {
-          ...(data?.objectMapValue &&{"input_mapping": inputMapObj}),
+          ...(data?.objectMapValueConnect &&{"input_mapping": inputMapObjConnectRestToGrpc}),
           ...(data?.restTogrpcResNamingConventionForm &&{"response_naming_convention": data?.restTogrpcResNamingConventionForm}),
           ...(data?.restTogrpcEnumsAsStrgsForm &&{"output_enum_as_string": data?.restTogrpcEnumsAsStrgsForm}),
           ...(data?.restTogrpcTimestmpAsStrgsForm &&{"output_timestamp_as_string": data?.restTogrpcTimestmpAsStrgsForm}),
@@ -879,7 +946,10 @@ const backendBody=
               // "mandatory": true,
               // "immediate": false,
               "name": data.amqpProducerQueueNameForm
-            }})
+            }}),
+            "proxy": {
+              "flatmap_filter": data?.flatmapFilterArr
+            }
       },
       "target": null,
       "method": data?.method,
@@ -891,16 +961,16 @@ const backendBody=
   
 }
 console.log(backendBody);
-this.mainSer.addBackend(this.endpointId,backendBody).subscribe({
-  next:(res:any)=>{
-    console.log(res);
-    this.fetchItemsFromBackend();
-  },
-  error:(err:any)=>{
-    console.log(err);
+// this.mainSer.addBackend(this.endpointId,backendBody).subscribe({
+//   next:(res:any)=>{
+//     console.log(res);
+//     this.fetchItemsFromBackend();
+//   },
+//   error:(err:any)=>{
+//     console.log(err);
     
-  }
-})
+//   }
+// })
 
     // this.http.post('https://api.example.com/items', data).subscribe((response: any) => {
     //   this.items[index] = { ...data, id: response.id, isNew: false }; // Update item with ID and mark as not new
@@ -916,10 +986,23 @@ const renamingObj = data?.objectMapValue?.reduce((acc:any, [key, value]:any) => 
   acc[key] = value;
   return acc;
 }, {});
-const inputMapObj = data?.objectMapValue?.reduce((acc:any, [key, value]:any) => {
+console.log(renamingObj);
+console.log(data.objectMapValue);
+
+const inputMapObjConnectRestToGrpc = data?.objectMapValueConnect?.reduce((acc:any, [key, value]:any) => {
   acc[key] = value;
   return acc;
 }, {});
+const inputMapObjConnectRestToGraphql = data?.objectMapValueConnectRestToGraph?.reduce((acc:any, [key, value]:any) => {
+  acc[key] = value;
+  return acc;
+}, {});
+const endpointMapObj=data?.objectMapValueAuth?.reduce((acc:any, [key, value]:any) => {
+  acc[key] = value;
+  return acc;
+}, {});
+console.log(endpointMapObj);
+console.log(data.objectMapValueAuth);
 const backendBody={
   "id": data?.id,
   ...(data?.hostArrayValue?.length>0 &&{"host": data?.hostArrayValue}),
@@ -961,9 +1044,7 @@ const backendBody={
       "shared": data.isSharedCacheActive
     }}),
     ...(data?.isAuthActive &&{"auth/client-credentials": {
-  "endpoint_params": {
-    "5t": "ji"
-  },
+  "endpoint_params": endpointMapObj,
   ...(data?.clientId &&{"client_id": data?.clientId}),
   ...(data?.clientSecret &&{"client_secret": data?.clientSecret}),
   ...(data?.tokenUrl &&{"token_url": data?.tokenUrl}),
@@ -1003,7 +1084,7 @@ const backendBody={
     ...(data?.isRestToGraphqlActive &&{"backend/graphql": {
       ...(data?.restTographQLOpTypeForm &&{"type": data?.restTographQLOpTypeForm}),
       ...(data?.restTographQLInlineQueryForm &&{"query": data?.restTographQLInlineQueryForm}),
-      "variables": {},
+      "variables": inputMapObjConnectRestToGraphql,
   ...(data?.restToGraphqlOpNameForm &&{"operationName": data?.restToGraphqlOpNameForm}),
   ...(data?.restTographQLQueryPathForm &&{"query_path": data?.restTographQLQueryPathForm}),
     }}),
@@ -1015,7 +1096,7 @@ const backendBody={
       "path": data?.pathRestToSoapForm
     }}),
     ...(data?.isrestToGRPCActive &&{"backend/grpc": {
-      ...(data?.objectMapValue &&{"input_mapping": inputMapObj}),
+      ...(data?.objectMapValueConnectRestToGraph &&{"input_mapping": inputMapObjConnectRestToGrpc}),
       ...(data?.restTogrpcResNamingConventionForm &&{"response_naming_convention": data?.restTogrpcResNamingConventionForm}),
       ...(data?.restTogrpcEnumsAsStrgsForm &&{"output_enum_as_string": data?.restTogrpcEnumsAsStrgsForm}),
       ...(data?.restTogrpcTimestmpAsStrgsForm &&{"output_timestamp_as_string": data?.restTogrpcTimestmpAsStrgsForm}),
@@ -1049,7 +1130,10 @@ const backendBody={
   ...(data.debug &&{"debug": data.debugResponse}),
   ...(data.path &&{"path": data.pathResponse}),
   ...(data.template &&{"template": data.templateResponse})
-}})
+}}),
+"proxy": {
+              "flatmap_filter": data?.flatmapFilterArr
+            }
   },
   // "target": null,
   "method": data?.method,
@@ -1106,39 +1190,55 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
   hostArray:any=[];
   parameterHeaderArray:any=[];
   updateParametersArrayRequest(index:any) {
-    this.getFormGroup(index).get('hostArrayValue')?.setValue([...this.hostArray]);
+    this.getFormGroup(index).get('hostArrayValue')?.setValue([...this.hostArray[index]]);
   }
   addParameterRequest(formIndex:number) {
     const queryParamsValue = this.getFormGroup(formIndex).get('host')?.value;
     
     if (queryParamsValue) {
-      this.hostArray.push(queryParamsValue);
+      this.hostArray[formIndex].push(queryParamsValue);
       this.updateParametersArrayRequest(formIndex);
       this.getFormGroup(formIndex).get('host')?.reset();
     }
   }
   removeParameterRequest(formIndex:number,index: number) {
-    this.hostArray.splice(index, 1);
+    this.hostArray[formIndex].splice(index, 1);
     this.updateParametersArrayRequest(formIndex);
   }
 
   // response manipulation
-
-  updateMapControl(formGroupIndex:any) {
-    // Convert Map to array of key-value pairs
-    const mapArray = Array.from(this.objectMap.entries());
+  objectMaps: Map<string, string>[] = [];
+  updateMapControl(formGroupIndex: number) {
+    const mapArray = Array.from(this.objectMaps[formGroupIndex].entries());
     this.getFormGroup(formGroupIndex).get('objectMapValue')?.setValue(mapArray);
   }
   
-  addToMap(formGroupIndex:number,key: string, value: string) {
-    this.objectMap.set(key, value);
-    this.updateMapControl(formGroupIndex);  // Sync form control with updated Map
+  
+  
+  addToMap(formGroupIndex: number, key: string, value: string) {
+    const currentMap = this.objectMaps[formGroupIndex];
+    currentMap.set(key, value);
+    this.updateMapControl(formGroupIndex);
   }
   
-  removeFromMap(formGroupIndex:number,key: string) {
-    this.objectMap.delete(key);
-    this.updateMapControl(formGroupIndex);  // Sync form control with updated Map
+  removeFromMap(formGroupIndex: number, key: string) {
+    const currentMap = this.objectMaps[formGroupIndex];
+    currentMap.delete(key);
+    this.updateMapControl(formGroupIndex);
   }
+  patchRenamingObj(formGroupIndex: number, renamingObj: Record<string, string>) {
+    if(renamingObj){
+    const mapArray = Object.entries(renamingObj);
+    const currentMap = new Map<string, string>(mapArray);
+  
+    // Update objectMaps
+    this.objectMaps[formGroupIndex] = currentMap;
+  
+    // Update the form control
+    this.getFormGroup(formGroupIndex).get('objectMapValue')?.setValue(mapArray);
+    }
+  }
+  
 
   getMapFromControl(index:any): Map<string, string> {
     const mapArray = this.getFormGroup(index).get('objectMapValue')?.value || [];
@@ -1171,11 +1271,12 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
             this.getFormGroup(formGroupIndex).get('flatmapTargetObj')?.value || undefined
           ].filter(value => value !== undefined) // Filter out undefined values
         };
+        console.log(this.faltMapArr[formGroupIndex]);
         
-      this.faltMapArr.push(obj);
+      this.faltMapArr[formGroupIndex].push(obj);
 
-      this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...this.faltMapArr])
-      console.log(this.faltMapArr);
+      this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...this.faltMapArr[formGroupIndex]])
+      console.log(this.faltMapArr[formGroupIndex]);
       this.getFormGroup(formGroupIndex).get('operationType')?.reset()
       this.getFormGroup(formGroupIndex).get('flatmapOriginalObj')?.reset()
       this.getFormGroup(formGroupIndex).get('flatmapTargetObj')?.reset()
@@ -1197,8 +1298,8 @@ this.mainSer.updateBackend(backendId,backendBody).subscribe({
      this.removeFromMap(formGroupIndex,index);
     }
     else if(fieldName ==='flatMap'){
-      this.faltMapArr.splice(index,1)
-      this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...this.faltMapArr])
+      this.faltMapArr[formGroupIndex].splice(index,1)
+      this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...this.faltMapArr[formGroupIndex]])
     }
     
   }
@@ -1257,23 +1358,67 @@ removeParameterAuth(formGroupIndex:number,index: any, fieldName:'endpoint_params
   }
 
 }
-
+objectMapsAuth:Map<string,string>[]=[];
 updateMapControlAuth(formGroupIndex:number) {
   // Convert Map to array of key-value pairs
-  const mapArray = Array.from(this.objectMapAuth.entries());
+  const mapArray = Array.from(this.objectMapsAuth[formGroupIndex].entries());
   this.getFormGroup(formGroupIndex).get('objectMapValueAuth')?.setValue(mapArray);
 }
 
 addToMapAuth(formGroupIndex:number,key: string, value: string) {
-  this.objectMapAuth.set(key, value);
-  this.updateMapControlAuth(formGroupIndex);  // Sync form control with updated Map
+  // this.objectMapAuth.set(key, value);
+  // this.updateMapControlAuth(formGroupIndex);  
+  const currentMap = this.objectMapsAuth[formGroupIndex];
+  currentMap.set(key, value);
+  this.updateMapControlAuth(formGroupIndex);
 }
 
 removeFromMapAuth(formGroupIndex:number,key: string) {
-  this.objectMapAuth.delete(key);
-  this.updateMapControlAuth(formGroupIndex);  // Sync form control with updated Map
+  const currentMap = this.objectMapsAuth[formGroupIndex];
+    currentMap.delete(key);
+  // this.objectMapAuth.delete(key);
+  this.updateMapControlAuth(formGroupIndex);  
 }
+patchFlatMapArray(formGroupIndex: number, resultArray:any){
+ 
+ this.getFormGroup(formGroupIndex).get('flatmapFilterArr')?.setValue([...resultArray])
+}
+patchRenamingAuthObj(formGroupIndex: number, renamingObj: Record<string, string>) {
+  if(renamingObj){
+  const mapArray = Object.entries(renamingObj);
+  const currentMap = new Map<string, string>(mapArray);
 
+  // Update objectMaps
+  this.objectMapsAuth[formGroupIndex] = currentMap;
+
+  // Update the form control
+  this.getFormGroup(formGroupIndex).get('objectMapValueAuth')?.setValue(mapArray);
+  }
+}
+patchRenamingConnectObj(formGroupIndex: number, renamingObj: Record<string, string>) {
+  if(renamingObj){
+  const mapArray = Object.entries(renamingObj);
+  const currentMap = new Map<string, string>(mapArray);
+
+  // Update objectMaps
+  this.objectMapsConnect[formGroupIndex] = currentMap;
+
+  // Update the form control
+  this.getFormGroup(formGroupIndex).get('objectMapValueConnect')?.setValue(mapArray);
+  }
+}
+patchRenamingConnectRestToGraphObj(formGroupIndex: number, renamingObj: Record<string, string>) {
+  if(renamingObj){
+  const mapArray = Object.entries(renamingObj);
+  const currentMap = new Map<string, string>(mapArray);
+
+  // Update objectMaps
+  this.objectMapsConnectRestToGraph[formGroupIndex] = currentMap;
+
+  // Update the form control
+  this.getFormGroup(formGroupIndex).get('objectMapValueConnectRestToGraph')?.setValue(mapArray);
+  }
+}
 getMapFromControlAuth(formGroupIndex:number): Map<string, string> {
   const mapArray = this.getFormGroup(formGroupIndex).get('objectMapValueAuth')?.value || [];
   return new Map(mapArray);
@@ -1284,16 +1429,16 @@ addParameterPolicies(formGroupIndex:number,fieldName: 'securityReqPolicy' | 'sec
   const fieldValue = this.getFormGroup(formGroupIndex).get(fieldName)?.value;
   if (fieldName) {
     if (fieldName === 'securityReqPolicy') {
-      this.parameterArraySecReqPolicy.push(fieldValue);
-      this.getFormGroup(formGroupIndex).get('secReqPolicyArrayValue')?.setValue([...this.parameterArraySecReqPolicy]);
+      this.parameterArraySecReqPolicy[formGroupIndex].push(fieldValue);
+      this.getFormGroup(formGroupIndex).get('secReqPolicyArrayValue')?.setValue([...this.parameterArraySecReqPolicy[formGroupIndex]]);
     }
     else if (fieldName === 'securityResPolicy') {
-      this.parameterArraySecResPolicy.push(fieldValue);
-      this.getFormGroup(formGroupIndex).get('secResPolicyArrayValue')?.setValue([...this.parameterArraySecResPolicy]);
+      this.parameterArraySecResPolicy[formGroupIndex].push(fieldValue);
+      this.getFormGroup(formGroupIndex).get('secResPolicyArrayValue')?.setValue([...this.parameterArraySecResPolicy[formGroupIndex]]);
     }
     else if (fieldName === 'jwtReqPolicy') {
-      this.parameterArrayJwtValReqPolicy.push(fieldValue);
-      this.getFormGroup(formGroupIndex).get('jwtReqPolicyArrayValue')?.setValue([...this.parameterArrayJwtValReqPolicy]);
+      this.parameterArrayJwtValReqPolicy[formGroupIndex].push(fieldValue);
+      this.getFormGroup(formGroupIndex).get('jwtReqPolicyArrayValue')?.setValue([...this.parameterArrayJwtValReqPolicy[formGroupIndex]]);
     }
     this.getFormGroup(formGroupIndex).get(fieldName)?.reset();
   }
@@ -1302,50 +1447,59 @@ addParameterPolicies(formGroupIndex:number,fieldName: 'securityReqPolicy' | 'sec
 
 removeParameterPolicies(formGroupIndex:number,index: number, fieldName: 'securityReqPolicy' | 'securityResPolicy' | 'jwtReqPolicy') {
   if (fieldName === 'securityReqPolicy') {
-    this.parameterArraySecReqPolicy.splice(index, 1);
-    this.getFormGroup(formGroupIndex).get('secReqPolicyArrayValue')?.setValue([...this.parameterArraySecReqPolicy]);
+    this.parameterArraySecReqPolicy[formGroupIndex].splice(index, 1);
+    this.getFormGroup(formGroupIndex).get('secReqPolicyArrayValue')?.setValue([...this.parameterArraySecReqPolicy[formGroupIndex]]);
   }
   else if (fieldName === 'securityResPolicy') {
-    this.parameterArraySecResPolicy.splice(index, 1);
-    this.getFormGroup(formGroupIndex).get('secResPolicyArrayValue')?.setValue([...this.parameterArraySecResPolicy]);
+    this.parameterArraySecResPolicy[formGroupIndex].splice(index, 1);
+    this.getFormGroup(formGroupIndex).get('secResPolicyArrayValue')?.setValue([...this.parameterArraySecResPolicy[formGroupIndex]]);
   }
   else if (fieldName === 'jwtReqPolicy') {
-    this.parameterArrayJwtValReqPolicy.splice(index, 1);
-    this.getFormGroup(formGroupIndex).get('jwtReqPolicyArrayValue')?.setValue([...this.parameterArrayJwtValReqPolicy]);
+    this.parameterArrayJwtValReqPolicy[formGroupIndex].splice(index, 1);
+    this.getFormGroup(formGroupIndex).get('jwtReqPolicyArrayValue')?.setValue([...this.parameterArrayJwtValReqPolicy[formGroupIndex]]);
   }
 }
   
 // connectivity options
-
+objectMapsConnect:Map<string,string>[]=[];
+objectMapsConnectRestToGraph:Map<string,string>[]=[];
 updateMapControlConnect(formGroupIndex:number) {
   // Convert Map to array of key-value pairs
-  const mapArray = Array.from(this.objectMapConnect.entries());
+  const mapArray = Array.from(this.objectMapsConnect[formGroupIndex].entries());
   this.getFormGroup(formGroupIndex).get('objectMapValueConnect')?.setValue(mapArray);
 }
-updateMapControlConnect1(formGroupIndex:number) {
+updateMapControlConnectRestToGraph(formGroupIndex:number) {
   // Convert Map to array of key-value pairs
-  const mapArray = Array.from(this.objectMapConnect1.entries());
-  this.getFormGroup(formGroupIndex).get('objectMapValueConnect1')?.setValue(mapArray);
+  const mapArray = Array.from(this.objectMapsConnectRestToGraph[formGroupIndex].entries());
+  this.getFormGroup(formGroupIndex).get('objectMapValueConnectRestToGraph')?.setValue(mapArray);
 }
 
 addToMapConnect(formGroupIndex:number,key: string, value: string) {
-  this.objectMapConnect.set(key, value);
-  this.updateMapControlConnect(formGroupIndex);  // Sync form control with updated Map
+  // this.objectMapConnect.set(key, value);
+  const currentMap = this.objectMapsConnect[formGroupIndex];
+  currentMap.set(key, value);
+  this.updateMapControlConnect(formGroupIndex);  
 }
 
-addToMapConnect1(formGroupIndex:number,key: string, value: string) {
-  this.objectMapConnect1.set(key, value);
-  this.updateMapControlConnect1(formGroupIndex);  // Sync form control with updated Map
+addToMapConnectRestToGraph(formGroupIndex:number,key: string, value: string) {
+  // this.objectMapConnectRestToGraph.set(key, value);
+  const currentMap = this.objectMapsConnectRestToGraph[formGroupIndex];
+  currentMap.set(key, value);
+  this.updateMapControlConnectRestToGraph(formGroupIndex);  
 }
 
 removeFromMapConnect(formGroupIndex:number,key: string) {
-  this.objectMapConnect.delete(key);
-  this.updateMapControlConnect(formGroupIndex);  // Sync form control with updated Map
+  // this.objectMapConnect.delete(key);
+  const currentMap = this.objectMapsConnect[formGroupIndex];
+    currentMap.delete(key);
+  this.updateMapControlConnect(formGroupIndex);  
 }
 
-removeFromMapConnect1(formGroupIndex:number,key: string) {
-  this.objectMapConnect1.delete(key);
-  this.updateMapControlConnect1(formGroupIndex);  // Sync form control with updated Map
+removeFromMapConnectRestToGraph(formGroupIndex:number,key: string) {
+  // this.objectMapConnectRestToGraph.delete(key);
+  const currentMap = this.objectMapsConnectRestToGraph[formGroupIndex];
+    currentMap.delete(key);
+  this.updateMapControlConnectRestToGraph(formGroupIndex);  
 }
 
 
@@ -1357,8 +1511,8 @@ addParameterConnect(formGroupIndex:number,fieldName: 'amqpConsumerRoutingKeysFor
 
   if (fieldName) {
     if (fieldName === 'amqpConsumerRoutingKeysForm') {
-      this.amqpRoutingKeysArray.push(fieldValue);
-      this.getFormGroup(formGroupIndex).get('amqpConsumerRoutingKeysFormArray')?.setValue([...this.amqpRoutingKeysArray]);
+      this.amqpRoutingKeysArray[formGroupIndex].push(fieldValue);
+      this.getFormGroup(formGroupIndex).get('amqpConsumerRoutingKeysFormArray')?.setValue([...this.amqpRoutingKeysArray[formGroupIndex]]);
     }
     else if (fieldName === 'restToGraphQLMap') {
     
@@ -1366,8 +1520,8 @@ addParameterConnect(formGroupIndex:number,fieldName: 'amqpConsumerRoutingKeysFor
       const renamedObject = this.getFormGroup(formGroupIndex).get('restTographQLValue')?.value;
 
       if (originalObject && renamedObject) {
-        this.addToMapConnect1(formGroupIndex,originalObject, renamedObject)
-        console.log(this.objectMapConnect);
+        this.addToMapConnectRestToGraph(formGroupIndex,originalObject, renamedObject)
+        console.log(this.objectMapConnectRestToGraph);
 
       }
     } else if (fieldName === 'inputMappingFieldAndMapAs') {
@@ -1387,10 +1541,10 @@ addParameterConnect(formGroupIndex:number,fieldName: 'amqpConsumerRoutingKeysFor
 
 removeParameterConnect(formGroupIndex:number,index: any, fieldName: 'amqpConsumerRoutingKeysForm' | 'restToGraphQLMap' | 'inputMappingFieldAndMapAs') {
   if (fieldName === "amqpConsumerRoutingKeysForm") {
-    this.amqpRoutingKeysArray.splice(index, 1);
-    this.getFormGroup(formGroupIndex).get('amqpConsumerRoutingKeysFormArray')?.setValue([...this.amqpRoutingKeysArray]);
+    this.amqpRoutingKeysArray[formGroupIndex].splice(index, 1);
+    this.getFormGroup(formGroupIndex).get('amqpConsumerRoutingKeysFormArray')?.setValue([...this.amqpRoutingKeysArray[formGroupIndex]]);
   } else if (fieldName == "restToGraphQLMap") {
-    this.removeFromMapConnect1(formGroupIndex,index);
+    this.removeFromMapConnectRestToGraph(formGroupIndex,index);
   } else if (fieldName === "inputMappingFieldAndMapAs") {
     this.removeFromMapConnect(formGroupIndex,index);
   }

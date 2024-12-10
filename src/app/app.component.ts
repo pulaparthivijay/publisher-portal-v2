@@ -23,7 +23,11 @@ const token:any=this.keycloak.getKeycloakInstance().token
      
       this.keycloak.getKeycloakInstance().loadUserInfo().then((user:any)=>{
       console.log(user);
-      this.getUserDetails(user.sub)
+      // this.getUserDetails(user.sub)
+      this.getUserDetails(user.sub, () => {
+        // Navigate to 'apis' only after user details are fetched
+        this.router.navigate(['apis']);
+      });
       localStorage.setItem('userid',user.sub)
       // this.router.navigate(['apis']);
       })
@@ -31,12 +35,23 @@ const token:any=this.keycloak.getKeycloakInstance().token
       console.log(this.keycloak.isLoggedIn());
     }})
   }
-  getUserDetails(id:any){
-    this.mainSer.getUserDetails(id).subscribe({
-            next:(res)=>{
-              console.log(res);
+  // getUserDetails(id:any){
+  //   this.mainSer.getUserDetails(id).subscribe({
+  //           next:(res)=>{
+  //             console.log(res);
               
-            }
+  //           }
+  //   });
+  //   }
+  getUserDetails(id: any, callback: () => void) {
+    this.mainSer.getUserDetails(id).subscribe({
+      next: (res) => {
+        console.log(res);
+        callback(); // Execute callback after fetching user details
+      },
+      error: (err) => {
+        console.error('Failed to fetch user details:', err);
+      },
     });
-    }
+  }
 }

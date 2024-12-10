@@ -12,9 +12,9 @@ export const urls={
     getEndpointCards:host+"/krakend/endpoint/getEndpointCards",
     addEndpoint:host+"/krakend/endpoint/addendpoint",
     linkEndpoint:host+"/krakend/linkEndpoint",
-    addbackend:host+"/krakend/endpoint/addBackendToEndpoint",
+    addbackend:host+"/krakend/endpoint/backend/addBackendToEndpoint",
     getEndpoint:host+"/krakend/endpoint/getEndpoint",
-    updateBackend:host+"/krakend/endpoint/updateBackendOfEndpoint",
+    updateBackend:host+"/krakend/endpoint/backend/updateBackendOfEndpoint",
     addParametersByEndpoint: host+"/krakend/endpoint/addParameterForwarding",
     addThrottling: host + "/krakend/endpoint/addOrUpdateThrottling",
     addPolicies:host +"/krakend/endpoint/addOrUpdatePolices"

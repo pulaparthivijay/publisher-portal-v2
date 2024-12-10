@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <h2>Backends</h2>
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3 mb-3 row-size">
         <div class="d-flex  align-items-end add-backend">
           <div class="col-sm-3">
             <label for="url" class="form-label">Host</label>
@@ -95,14 +95,14 @@
                               <!-- <input type="text" class="form-control" formControlName="host" /> -->
                               <div class="input-group mb-3">
                                 <input type="text" id="host" class="form-control" formControlName="host">
-                                <button class="btn btn-primary" type="button" id="button-addon2"
+                                <button class="btn btn-primary" type="button" id="button-addonHost"
                                     (click)="addParameterRequest(i)"><i class="bi bi-plus-lg"></i></button>
                             </div>
                               <!-- <button mat-raised-button class="addhost-btn mt-1" (click)="addParameterRequest(i)">Add host</button> -->
                             </div>
                             <div class="mt-3 d-flex">
                   
-                              <button *ngFor="let host of hostArray; let j = index" class="parameter-item">
+                              <button *ngFor="let host of hostArray[i]; let j = index" class="parameter-item">
                                 {{ host }}<mat-icon (click)="removeParameterRequest(i,j)"
                                   class="d-flex align-items-center justify-content-end">close</mat-icon>
                               </button>
@@ -508,7 +508,7 @@
                                   <div class="input-group mb-3">
                                     <input type="text" class="form-control" formControlName="renamedObj" id="renamedObject"
                                   aria-describedby="audience" placeholder="id">
-                                    <button class="btn btn-primary" type="button" id="button-addon2"
+                                    <button class="btn btn-primary" type="button" id="button-addonRenameObj"
                                     (click)="addParameter(i,'renaming')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
                                             height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                                             <path fill-rule="evenodd"
@@ -522,7 +522,7 @@
                       
                       
                               <div class=" col-sm-12 mt-3 d-flex">
-                                <button *ngFor="let attr of objectMap | keyvalue" class="parameter-item">
+                                <button *ngFor="let attr of objectMaps[i] | keyvalue" class="parameter-item">
                                   {{ attr.key }} -> {{attr.value}}<mat-icon (click)="removeParameter(i,attr.key ,'renaming')"
                                     class="d-flex align-items-center justify-content-end">close</mat-icon>
                                 </button>
@@ -732,7 +732,7 @@
                                   <div class="input-group mb-3">
                                     <input type="text" id="findkey" class="form-control" formControlName="contentReplacerKey"
                                   placeholder="e.g., 'hem'">
-                                    <button class="btn btn-primary" type="button" id="button-addon2"
+                                    <button class="btn btn-primary" type="button" id="button-addonConRep"
                                     (click)="createContentReplacerKey(i)">Create Key</button>
                                 </div>
                               </div>
@@ -812,7 +812,7 @@
                             </div>
                       
                             <div class=" col-sm-12 mt-3 d-flex">
-                              <button *ngFor="let attr of faltMapArr ; let j = index" class="parameter-item">
+                              <button *ngFor="let attr of faltMapArr[i] ; let j = index" class="parameter-item">
                                 {{ attr?.type }} -> [ "{{ attr?.args[0] !== null && attr?.args[0] !== undefined ? attr.args[0] : '' }}"
                                 @if (attr?.args[1] !== null && attr?.args[1]!== undefined) {
                                 ,
@@ -918,10 +918,10 @@
                                     <input class="form-check-input" type="checkbox" value="" id="logState"
                                       formControlName="logStatusChange">
                                     <label class="form-check-label" for="logState">
-                                      Log state changes
+                                      Log state changes <i class="bi bi-info-circle" [matTooltip]=logStatusChange_tooltip></i>
                                     </label>
                                   </div>
-                                  <div class="form-text">Write in the logs when the circuit changes its state (open/closed).</div>
+                                 
                     
                                 </div>
                               </div>
@@ -944,16 +944,15 @@
                             <div class="row">
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="maxRateLimit" class="form-label">MaxRateLimit</label>
+                                  <label for="maxRateLimit" class="form-label">MaxRateLimit <i class="bi bi-info-circle" [matTooltip]=maxRateLimit_tooltip></i></label>
                                   <input type="number" class="form-control" id="maxRateLimit" formControlName="maxRateLimit"
                                     [class.is-invalid]="getFormGroup(i).get('maxRateLimit')?.invalid">
-                                  <div class="form-text">Maximum requests you want to let this backend handle in the specified time (every)
-                                  </div>
+                                  
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="every" class="form-label">Every</label>
+                                  <label for="every" class="form-label">Every <i class="bi bi-info-circle" [matTooltip]=everyThrot_tooltip></i></label>
                                   <input type="text" class="form-control" id="every" formControlName="every"
                                     [class.is-invalid]="getFormGroup(i).get('every')?.invalid && getFormGroup(i).get('every')?.touched">
                                   <div class="invalid-feedback"
@@ -961,16 +960,15 @@
                                     The amount of time you want to assign followed by its unit (e.g.: `2s`, `200ms`). <br> Valid time units
                                     are: ns, us, (or µs), ms, s, m, h.
                                   </div>
-                                  <div class="form-text">Time window where this rate limit applies.</div>
+                                  
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="capacity" class="form-label">Capacity(Burst size)</label>
+                                  <label for="capacity" class="form-label">Capacity(Burst size) <i class="bi bi-info-circle" [matTooltip]=capacityThrot_tooltip></i></label>
                                   <input type="number" class="form-control" id="capacity" formControlName="capacity"
                                     [class.is-invalid]="getFormGroup(i).get('capacity')?.invalid">
-                                  <div class="form-text">Recommended value capacity=max_rate. A token bucket algorithm is used with a bucket
-                                    capacity == tokens added per second. KrakenD is able to allow bursting on the request rates.</div>
+                                  
                                 </div>
                               </div>
                             </div>
@@ -1013,62 +1011,58 @@
                             <div class="row">
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="clientId" class="form-label">CLIENT ID</label>
+                                  <label for="clientId" class="form-label">CLIENT ID <i class="bi bi-info-circle" [matTooltip]=clientId_tooltip></i></label>
                                   <input type="text" class="form-control" id="clientId" formControlName="clientId">
-                                  <div class="form-text">The Client ID as it will provided to the Auth server</div>
+                                  
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="clientSecret" class="form-label">CLIENT SECRET</label>
+                                  <label for="clientSecret" class="form-label">CLIENT SECRET <i class="bi bi-info-circle" [matTooltip]=clientSecret_tooltip></i></label>
                                   <input type="text" class="form-control" id="clientSecret" formControlName="clientSecret">
-                                  <div class="form-text">The Client secret as it will provided to the Auth server</div>
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="tokenUrl" class="form-label">Token URL</label>
+                                  <label for="tokenUrl" class="form-label">Token URL <i class="bi bi-info-circle" [matTooltip]=tokenUrl_tooltip></i></label>
                                   <input type="text" class="form-control" id="tokenUrl" formControlName="tokenUrl">
-                                  <div class="form-text">The URL where the negotiation of the token will happen</div>
+                                  
                                 </div>
                               </div>
                               <div class="col-sm-12 col-md-6">
                                 <div class="mb-3">
-                                  <label for="scopes" class="form-label">Scopes</label>
+                                  <label for="scopes" class="form-label">Scopes <i class="bi bi-info-circle" [matTooltip]=scopes_tooltip></i></label>
                                   <input type="text" class="form-control" id="scopes" formControlName="scopes">
-                                  <div class="form-text">Comma separated list of scopes needed.</div>
                                 </div>
                               </div>
                               <div class="row mb-3">
                                 <div class="col-sm-12">
-                                  <h4>Additional endpoint parameters</h4>
+                                  <h4>Additional endpoint parameters <i class="bi bi-info-circle" [matTooltip]=objEndpointParameter_tooltip></i></h4>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                   <!-- <label for="rootObject" class="form-label">Original Object</label> -->
-                                  <input type="text" class="form-control" formControlName="endpointKey" id="originalObject"
+                                  <input type="text" class="form-control" formControlName="endpointKey" id="endpointKey"
                                     aria-describedby="audience" placeholder="name">
                                 </div>
                     
                                 <div class="col-sm-12 col-md-4">
                                   <!-- <label for="rootObject" class="form-label">Renamed Object</label> -->
-                                  <input type="text" class="form-control" formControlName="endpointValue" id="renamedObject"
+                                  <!-- <input type="text" class="form-control" formControlName="endpointValue" id="renamedObject"
+                                    aria-describedby="audience" placeholder="value "> -->
+                                    <div class="input-group mb-3">
+                                      <input type="text" class="form-control" formControlName="endpointValue" id="endpointValue"
                                     aria-describedby="audience" placeholder="value ">
-                                </div>
-                    
-                                <div class="col-sm-12 col-md-4 d-flex align-items-end">
-                                  <button type="button" class="btn btn-outline-primary"
-                                    (click)="addParameterAuth(i,'endpoint_params')">Add</button>
-                                </div>
-                    
-                                <div class="col-sm-12">
-                                  <div class="form-text">You can rename any attributes returned by the backend and use a name more
-                                    convenient
-                                    for you.
+                                      <button class="btn btn-primary" type="button" id="button-addonAddEndPar"
+                                      (click)="addParameterAuth(i,'endpoint_params')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                              height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                              <path fill-rule="evenodd"
+                                                  d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                          </svg></button>
                                   </div>
                                 </div>
-                    
+                  
                                 <div class=" col-sm-12 mt-3 d-flex">
-                                  <button *ngFor="let attr of objectMapAuth | keyvalue" class="parameter-item">
+                                  <button *ngFor="let attr of objectMapsAuth[i] | keyvalue" class="parameter-item">
                                     {{ attr.key }} -> {{attr.value}}<mat-icon (click)="removeParameterAuth(i,attr.key ,'endpoint_params')"
                                       class="d-flex align-items-center justify-content-end">close</mat-icon>
                                   </button>
@@ -1092,12 +1086,10 @@
                             }@else{
                             <div class="col-sm-12 col-md-6">
                               <div class="mb-3">
-                                <label for="audience" class="form-label">Audience</label>
+                                <label for="audience" class="form-label">Audience <i class="bi bi-info-circle" [matTooltip]=audienceAuth_tooltip></i></label>
                                 <input type="text" class="form-control" id="audience" formControlName="audience"
                                   placeholder="https://hello-there.a.run.app">
-                                <div class="form-text">The audience in GCP looks like an URL, and contains the destination service you will
-                                  ask a token for. Most of the times this URL will match exactly with the host entry. Credentials are taken
-                                  from the environment variable GOOGLE_APPLICATION_CREDENTIALS, which Cloud Run passes automatically.</div>
+                               
                               </div>
                             </div>
                             }
@@ -1117,18 +1109,16 @@
                             }@else{
                             <div class="col-sm-12 col-md-6">
                               <div class="mb-3">
-                                <label for="user" class="form-label">User</label>
+                                <label for="user" class="form-label">User <i class="bi bi-info-circle" [matTooltip]=user_tooltip></i></label>
                                 <input type="text" class="form-control" id="user" formControlName="user">
-                                <div class="form-text">The proxy address used to forward the traffic. The address must contain the protocol
-                                  and the port.</div>
+                                
                               </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                               <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="password" class="form-label">Password <i class="bi bi-info-circle" [matTooltip]=password_tooltip></i></label>
                                 <input type="password" class="form-control" id="password" formControlName="password">
-                                <div class="form-text">The proxy address used to forward the traffic. The address must contain the protocol
-                                  and the port.</div>
+                                
                               </div>
                             </div>
                             }
@@ -1167,31 +1157,39 @@
                                   <h3>Request Policies</h3>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="reqp1" class="form-label">Request Policies</label>
+                                      <label for="reqp1" class="form-label">Request Policies <i class="bi bi-info-circle" [matTooltip]=reqpolicies_tooltip></i></label>
                                       <!-- <p>Request Policies</p> -->
                                       <div class="d-flex align-items-center">
-                                        <input id="reqp1" type="text" class="input-size me-2 form-control"
+                                        <!-- <input id="reqp1" type="text" class="input-size me-2 form-control"
                                           placeholder="req_params.DocId.startsWith('EU')" formControlName="securityReqPolicy">
-                                        <!-- <button type="button" class="btn btn-info" (click)="addParameterReqP1()">+</button> -->
-                                        <!-- edited -->
-                                        <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'securityReqPolicy')">+</button>
-                        
+                                        
+                                        <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'securityReqPolicy')">+</button> -->
+                                        <div class="input-group input-size">
+                                          <input id="reqp1" type="text" class="form-control"
+                                          placeholder="req_params.DocId.startsWith('EU')" formControlName="securityReqPolicy">
+                                          <button class="btn btn-primary" type="button" id="button-addonSecPol"
+                                          (click)="addParameterPolicies(i,'securityReqPolicy')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                  height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                  <path fill-rule="evenodd"
+                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                              </svg></button>
                                       </div>
-                                      <div class="form-text">Policy. Example: hasQuerystring('q')</div>
+                                      </div>
+                                      
                         
                                       <div class="mt-3 d-flex">
-                                        <button *ngFor="let parameter of parameterArraySecReqPolicy; let j = index" class="parameter-item">
+                                        <button *ngFor="let parameter of parameterArraySecReqPolicy[i]; let j = index" class="parameter-item">
                                           {{ parameter }}<mat-icon (click)="removeParameterPolicies(i,j,'securityReqPolicy')"
                                             class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                       </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorStCode1" class="form-label">Error status code</label>
+                                      <label for="errorStCode1" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=reqErrCode_tooltip></i></label>
                         
                                       <input id="errorStCode1" type="number" class="input-size form-control" formControlName="secReqErrorStCode"
                                         placeholder="400" />
-                                      <div class="form-text">Returned status on violated policy</div>
+                                      <div class="form-text"></div>
                                     </div>
                         
                                   </div>
@@ -1203,22 +1201,16 @@
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
                                       <!-- <p>Error body</p> -->
-                                      <label for="errorBody1" class="form-label">Error body</label>
+                                      <label for="errorBody1" class="form-label">Error body <i class="bi bi-info-circle" [matTooltip]=reqErrBody_tooltip></i></label>
                                       <input id="errorBody1" type="text" class="input-size form-control" formControlName="secReqErrorBody"
                                         placeholder="Policies violated" />
                         
-                                      <div class="form-text">Empty string to return the validation <br>error, or write a string with the
-                                        error <br>response body. You can add escaped <br>JSON, XML, etc in the string and add a
-                                        <br>Content-Type.
-                                      </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorContentType1" class="form-label">Error content type</label>
+                                      <label for="errorContentType1" class="form-label">Error content type <i class="bi bi-info-circle" [matTooltip]=reqContentType_tooltip></i></label>
                                       <input id="errorContentType1" type="text" class="input-size form-control"
                                         formControlName="secReqErrorContentType" placeholder="Text/Plain" />
-                                      <div class="form-text">The Content-Type header you'd like to<br> send with the error response. When
-                                        unset,<br>
-                                        uses text/plain by default.</div>
+                                      
                                     </div>
                         
                                   </div>
@@ -1228,28 +1220,36 @@
                                   <h3>Response Policies</h3>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="resP" class="form-label">Response Policies</label>
+                                      <label for="resP" class="form-label">Response Policies <i class="bi bi-info-circle" [matTooltip]=resPolicies_tooltip></i></label>
                                       <div class="d-flex align-items-center">
-                                        <input id="resP" type="text" class="input-size me-2 form-control" formControlName="securityResPolicy"
+                                        <!-- <input id="resP" type="text" class="input-size me-2 form-control" formControlName="securityResPolicy"
                                           placeholder="!isEmpty(resp_data.message)">
-                                        <!-- <button type="button" class="btn btn-info" (click)="addParameterResP()">+</button> -->
-                                        <!-- edited -->
-                                        <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'securityResPolicy')">+</button>
-                        
+                                        
+                                        <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'securityResPolicy')">+</button> -->
+                                        <div class="input-group input-size">
+                                          <input id="resP" type="text" class="form-control" formControlName="securityResPolicy"
+                                          placeholder="!isEmpty(resp_data.message)">
+                                          <button class="btn btn-primary" type="button" id="button-addonSecResPol"
+                                          (click)="addParameterPolicies(i,'securityResPolicy')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                  height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                  <path fill-rule="evenodd"
+                                                      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                              </svg></button>
                                       </div>
-                                      <div class="form-text">Policy. Example: hasQuerystring('q')</div>
+                                      </div>
+                                      
                                       <div class="mt-3 d-flex">
-                                        <button *ngFor="let parameter of parameterArraySecResPolicy; let j = index" class="parameter-item">
+                                        <button *ngFor="let parameter of parameterArraySecResPolicy[i]; let j = index" class="parameter-item">
                                           {{ parameter }}<mat-icon (click)="removeParameterPolicies(i,j,'securityResPolicy')"
                                             class="d-flex align-items-center justify-content-end">close</mat-icon>
                                         </button>
                                       </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorStCode2" class="form-label">Error status code</label>
+                                      <label for="errorStCode2" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=resErrCode_tooltip></i></label>
                                       <input id="errorStCode2" type="number" class="input-size form-control" formControlName="secResErrorStCode"
                                         placeholder="400" />
-                                      <div class="form-text">Returned status on violated policy</div>
+                                      
                                     </div>
                         
                                   </div>
@@ -1260,23 +1260,18 @@
                                 <div>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorBody2" class="form-label">Error body</label>
+                                      <label for="errorBody2" class="form-label">Error body <i class="bi bi-info-circle" [matTooltip]=resErrBody_tooltip></i></label>
                                       <input id="errorBody2" type="text" class="input-size form-control" formControlName="secResErrorBody"
                                         placeholder="Policies violated" />
-                                      <div class="form-text">mpty string to return the validation<br> error, or write a string with the
-                                        error<br>
-                                        response body. You can add escaped<br>JSON, XML, etc in the string and add a <br>Content-Type.</div>
+                                      
                         
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                         
-                                      <label for="errorContentType2" class="form-label">Error content type</label>
+                                      <label for="errorContentType2" class="form-label">Error content type <i class="bi bi-info-circle" [matTooltip]=resErrContentType_tooltip></i></label>
                                       <input id="errorContentType2" type="text" class="input-size form-control"
                                         formControlName="secResErrorContentType" placeholder="Text/Plain" />
-                                      <div class="form-text">The Content-Type header you'd like to<br> send with the error response. When
-                                        unset,<br>
-                                        uses text/plain by default.</div>
-                        
+                                                              
                                     </div>
                         
                                   </div>
@@ -1287,18 +1282,26 @@
                         
                                 <div>
                                   <h3>Jwt validation Policeis</h3>
-                                  <label for="reqp2" class="form-label">Request Policies</label>
+                                  <label for="reqp2" class="form-label">JWT Policies <i class="bi bi-info-circle" [matTooltip]=jwtPolicies_tooltip></i></label>
                                   <div class="d-flex col-sm-12 col-md-6">
-                                    <input id="reqp2" type="text" class="input-size me-2 form-control"
+                                    <!-- <input id="reqp2" type="text" class="input-size me-2 form-control"
                                       placeholder="has(JWT.user_id) && 'legal' == JWT.department" formControlName="jwtReqPolicy" />
-                                    <!-- <button type="button" class="btn btn-info" (click)="addParameterReqP()">+</button><br> -->
-                                    <!-- edited -->
-                                    <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'jwtReqPolicy')">+</button><br>
-                        
+                                    
+                                    <button type="button" class="btn btn-info" (click)="addParameterPolicies(i,'jwtReqPolicy')">+</button><br> -->
+                                    <div class="input-group input-size">
+                                      <input id="reqp2" type="text" class="form-control"
+                                      placeholder="has(JWT.user_id) && 'legal' == JWT.department" formControlName="jwtReqPolicy" />
+                                      <button class="btn btn-primary" type="button" id="button-addonJwtPol"
+                                      (click)="addParameterPolicies(i,'jwtReqPolicy')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                              height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                              <path fill-rule="evenodd"
+                                                  d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                          </svg></button>
                                   </div>
-                                  <div class="form-text">Policy. Example:has(JWT.user_id) && 'legal' == JWT.department</div>
+                                  </div>
+                                  
                                   <div class="mt-3 d-flex">
-                                    <button *ngFor="let parameter of parameterArrayJwtValReqPolicy; let j = index" class="parameter-item">
+                                    <button *ngFor="let parameter of parameterArrayJwtValReqPolicy[i]; let j = index" class="parameter-item">
                                       {{ parameter }}<mat-icon (click)="removeParameterPolicies(i,j,'jwtReqPolicy')"
                                         class="d-flex align-items-center justify-content-end">close</mat-icon>
                                     </button>
@@ -1310,7 +1313,7 @@
                         
                         
                                 <div>
-                                  <h3>Debug and performance</h3>
+                                  <h3>Debug and performance <i class="bi bi-info-circle" [matTooltip]=jwtDebug_tooltip></i></h3>
                                   <br>
                                   <div class="d-flex">
                                     <div class="col-sm-12 col-md-4">
@@ -1318,25 +1321,21 @@
                                         <input type="checkbox" class="input-size1" formControlName="enableDebug">&nbsp;&nbsp;&nbsp;
                                         <h3 class="checkbox-text">Enable Debug</h3><br>
                                       </div>
-                                      <div class="form-text">Evaluation results are printed in the<br> console.</div>
+                                      
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                       <div class="d-flex">
                                         <input type="checkbox" class="input-size1" formControlName="autoJoinPolicies">&nbsp;&nbsp;&nbsp;
-                                        <h3 class="checkbox-text">Auto Join Policies</h3><br>
+                                        <h3 class="checkbox-text">Auto Join Policies <i class="bi bi-info-circle" [matTooltip]=autoJoinPolicies_tooltip></i></h3>
                                       </div>
-                                      <div class="form-text">All policies concatenate with an AND<br>operation to evaluate a single
-                                        expression.<br> Faster, but harder to debug.</div>
                         
                         
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                       <div class="d-flex">
                                         <input type="checkbox" class="input-size1" formControlName="disableMacros">&nbsp;&nbsp;&nbsp;
-                                        <h3 class="checkbox-text">Disable Macros</h3><br>
+                                        <h3 class="checkbox-text">Disable Macros <i class="bi bi-info-circle" [matTooltip]=disableMacros_tooltip></i></h3><br>
                                       </div>
-                                      <div class="form-text">Advanced macros can be disabled when<br> not used for a faster
-                                        evaluation.</div>
                                     </div>
                         
                                   </div>
@@ -1359,17 +1358,15 @@
                         
                                   <div class="d-flex col-sm-12">
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorMessage" class="form-label">Error Message</label>
+                                      <label for="errorMessage" class="form-label">Error Message <i class="bi bi-info-circle" [matTooltip]=errMessage_tooltip></i></label>
                                       <input id="errorMessage" type="text" class="input-size form-control"
                                         formControlName="resSchemaValErrorMsg" />
-                                      <div class="form-text">The error message you want to show<br> when the validation fails. Leave it
-                                        empty<br> to show the JSON-schema validation<br> error.</div>
+                                      
                                     </div>
                                     <div class="col-sm-12 col-md-6">
-                                      <label for="errorStCode3" class="form-label">Error status code</label>
+                                      <label for="errorStCode3" class="form-label">Error status code <i class="bi bi-info-circle" [matTooltip]=errStatusCode_tooltip></i></label>
                                       <input id="errorStCode3" type="number" class="input-size form-control"
                                         formControlName="resSchemaValErrorStCode" placeholder="500" />
-                                      <div class="form-text">The HTTP status code you want to set<br> back in the response.</div>
                                     </div>
                         
                                   </div>
@@ -1421,37 +1418,29 @@
                                   </div>
                             
                                   <div class="col-sm-8">
-                                    <label for="exampleFormControlTextarea1" class="form-label">Body Editor</label>
+                                    <label for="exampleFormControlTextarea1" class="form-label">Body Editor <i class="bi bi-info-circle" [matTooltip]=bodyEditConn_tooltip></i></label>
                                     <textarea class="form-control fingerprint" id="exampleFormControlTextarea1" rows="3"
                                       formControlName="template"></textarea>
-                                    <div class="form-text">The response body you will return to the end-user. You can introduce the variables
-                                      .resp_headers.xxx, .resp_headers.xxx (with no-op), .resp_status.xxx (with no-op), .resp_body.xxx,
-                                      .req_params.Xxx, .req_headers.xxx, .req_querystring.xxx, .req_path</div>
+                                    
                                   </div>
                             
                                   <div class="row">
                                     <div class="col-sm-6">
-                                      <label for="conType" class="form-label">Content Type</label>
+                                      <label for="conType" class="form-label">Content Type <i class="bi bi-info-circle" [matTooltip]=contentTypeConn_tooltip></i></label>
                                       <input type="text" id="conType" class="form-control" formControlName="contentType">
-                                      <div id="conTypeBlock" class="form-text">
-                                        The Content-Type that you are coding in the template. Defaults to application/json
-                                      </div>
+                                      
                                     </div>
                                     <div class="col-sm-6">
-                                      <mat-checkbox class="example-margin" formControlName="debug">Enable Debug</mat-checkbox>
-                                      <div class="form-text">shows useful information in the logs with DEBUG level about the input received and the
-                                        body generated. Do not enable in production.
-                                      </div>
+                                      <mat-checkbox class="example-margin" formControlName="debug">Enable Debug <i class="bi bi-info-circle" [matTooltip]=enableDebugConn_tooltip></i></mat-checkbox>
+                                      
                                     </div>
                             
                                   </div>
                             
                                   <div class="col-sm-6">
-                                    <label for="path" class="form-label">Path</label>
+                                    <label for="path" class="form-label">Path <i class="bi bi-info-circle" [matTooltip]=pathConn_tooltip></i></label>
                                     <input type="text" id="path" class="form-control" formControlName="path">
-                                    <div id="conTypeBlock" class="form-text">
-                                      The Content-Type that you are coding in the template. Defaults to application/json
-                                    </div>
+                                    
                                   </div>
                             
                             
@@ -1473,19 +1462,16 @@
                                 }@else{
                                 <div class="d-flex col-sm-12">
                                   <div class="col-sm-12 col-md-6">
-                                    <label for="connectvWebProxy" class="form-label">Connect via Web Proxy</label>
+                                    <label for="connectvWebProxy" class="form-label">Connect via Web Proxy <i class="bi bi-info-circle" [matTooltip]=connectWebProxy_tooltip></i></label>
                                     <input type="text" class="input-size form-control" id="connectvWebProxy"
                                       formControlName="connectvWebProxyForm">
-                                    <div id="emailHelp" class="form-text">The proxy address used to forward the traffic. The address must
-                                      contain the protocol and the port.</div>
                                   </div>
                                   <div class="col-sm-12 col-md-6">
                                     <div class="d-flex">
                                       <input type="checkbox" class="input-size1" formControlName="donotFollowRedirectsForm">&nbsp;&nbsp;&nbsp;
-                                      <div class="checkbox-text">Don't follow redirects</div>
+                                      <div class="checkbox-text">Don't follow redirects <i class="bi bi-info-circle" [matTooltip]=redirectConn_tooltip></i></div>
                                     </div>
-                                    <div class="form-text">Check if you don't want KrakenD to follow redirects and let <br> the consuming user
-                                      to receive the 30x status code.</div>
+                                    
                                   </div>
                         
                                 </div>
@@ -1560,17 +1546,24 @@
                                   <div class="col-sm-12 col-md-4">
                         
                                     <label for="restTographQLValue" class="form-label">Value</label>
-                                    <input type="text" class="input-size form-control me-4" id="restTographQLValue"
+                                    <!-- <input type="text" class="input-size form-control me-4" id="restTographQLValue"
+                                      formControlName="restTographQLValue"> -->
+                                      <div class="input-group">
+                                        <input type="text" class="form-control" id="restTographQLValue"
                                       formControlName="restTographQLValue">
+                                        <button class="btn btn-primary" type="button" id="button-addonRestToGrQl"
+                                        (click)="addParameterConnect(i,'restToGraphQLMap')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                            </svg> Add Variable</button>
+                                    </div>
                                   </div>
                         
-                                  <div class="col-sm-12 col-md-4">
-                                    <button type="button" class="btn btn-info" (click)="addParameterConnect(i,'restToGraphQLMap')"><b>+</b> Add
-                                      Variable</button>
-                                  </div>
+                                 
                         
                                 </div>
-                                <div *ngFor="let attr of objectMapConnect1 | keyvalue" class="row mb-3 d-flex align-items-center">
+                                <div *ngFor="let attr of objectMapsConnectRestToGraph[i] | keyvalue" class="row mb-3 d-flex align-items-center">
                                   <div class="col-sm-12 col-md-4">
                                     {{attr.key}}
                                   </div>
@@ -1647,16 +1640,26 @@
                                   <div class="col-sm-12 col-md-6">
                                     <label for="amqpConsumerRoutingKeys" class="form-label">Routing Keys</label>
                                     <div class="d-flex">
-                                      <input type="text" class="input-size me-2 form-control" id="amqpConsumerRoutingKeys"
+                                      <div class="input-group input-size">
+                                        <input type="text" class="form-control" id="amqpConsumerRoutingKeys"
+                                        formControlName="amqpConsumerRoutingKeysForm">
+                                        <button class="btn btn-primary" type="button" id="button-addonRoutKey"
+                                        (click)="addParameterConnect(i,'amqpConsumerRoutingKeysForm')"><svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd"
+                                                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2" />
+                                            </svg></button>
+                                    </div>
+                                      <!-- <input type="text" class="input-size me-2 form-control" id="amqpConsumerRoutingKeys"
                                         formControlName="amqpConsumerRoutingKeysForm">
                                       <button type="button" class="btn btn-info"
-                                        (click)="addParameterConnect(i,'amqpConsumerRoutingKeysForm')">+</button>
+                                        (click)="addParameterConnect(i,'amqpConsumerRoutingKeysForm')">+</button> -->
                                     </div>
                                     <div id="amqpConsumerRoutingKeysHelp" class="form-text">List of all the routing keys or pattern to bind the
                                       queue to <br> the exchange
                                     </div>
                                     <div class="mt-3 d-flex">
-                                      <button *ngFor="let attr of amqpRoutingKeysArray; let j = index" class="parameter-item">
+                                      <button *ngFor="let attr of amqpRoutingKeysArray[i]; let j = index" class="parameter-item">
                                         {{ attr }}<mat-icon (click)="removeParameterConnect(i,j,'amqpConsumerRoutingKeysForm')"
                                           class="d-flex align-items-center justify-content-end">close</mat-icon>
                                       </button>
@@ -1904,11 +1907,11 @@
                                       formControlName="restTogprcInputMappingMapAsForm">
                                   </div>
                                   <div class="col-sm-12 col-md-4">
-                                    <button type="button" class="btn btn-info" (click)="addParameterConnect(i,'inputMappingFieldAndMapAs')"><b>+</b> Add
+                                    <button type="button" class="btn btn-primary" (click)="addParameterConnect(i,'inputMappingFieldAndMapAs')"><b>+</b> Add
                                       mapping</button>
                                   </div>
                                 </div>
-                                <div *ngFor="let attr of objectMapConnect | keyvalue" class="row mb-3 d-flex align-items-center">
+                                <div *ngFor="let attr of objectMapsConnect[i] | keyvalue" class="row mb-3 d-flex align-items-center">
                                   <div class="col-sm-12 col-md-4">
                                     {{attr.key}}
                                   </div>

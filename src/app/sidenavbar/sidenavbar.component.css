@@ -77,6 +77,8 @@
   }
   mat-sidenav-content{
     /* padding-top:20px; */
+    overflow-x: hidden;
+    overflow-y: scroll;
   }
   .sidenav-open {
     width: 250px; /* Width when sidenav is open */

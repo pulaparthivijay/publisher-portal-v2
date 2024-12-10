@@ -15,6 +15,8 @@ import { BackendComponent } from './backend/backend.component';
 import { ThrottlingComponent } from './throttling/throttling.component';
 import { PoliciesComponent } from './policies/policies.component';
 import { ResponseManipulationComponent } from './response-manipulation/response-manipulation.component';
+import { ConnectivityComponent } from './connectivity/connectivity.component';
+import { OpenapiComponent } from './openapi/openapi.component';
 
 const routes: Routes = [
   {path:"apis",component:ApicardsComponent,children:[
@@ -28,8 +30,8 @@ const routes: Routes = [
       {path:"deployments",component:DeploymentComponent},
       {path:"policies",component:PoliciesComponent},
       {path:"response",component:ResponseManipulationComponent},
-      
-
+      {path:"connectivity",component:ConnectivityComponent},
+      {path:"openapi",component:OpenapiComponent}
     ]}
   ]},
   {path:"gateways",component:GatewaycardsComponent,children:[

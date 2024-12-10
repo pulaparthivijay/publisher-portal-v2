@@ -17,17 +17,22 @@ export class EndpointService {
     // const options:any = {
     //   headers:headers
     // }
-    return this.http.post(url,body);
+    return this.http.post(url, body);
+  }
+
+  addThrottling(endpointId:any,body:any){
+    const url = urls.addThrottling+`?endpointId=${endpointId}`;
+    return this.http.post(url, body);
+  }
+
+  addPolicies(endpointId:any,body:any){
+    const url = urls.addPolicies+`?endpointId=${endpointId}`;
+    return this.http.post(url, body);
   }
 
   getEndpointById(endpointId:any){
     const url = urls.getEndpoint+`?endpointId=${endpointId}`;
-    return this.http.get(url)
+    return this.http.get(url);
   }
-
-
-
-
-
 
 }

@@ -1,0 +1,98 @@
+<div class="container">
+    <form [formGroup]="formGroupOpenapi">
+        <div class="row p-2">
+            <div class="col-sm-12">
+                <h3>Connectivity Options</h3>
+            </div>
+            <div class="col-sm-12">
+                <mat-accordion>
+                    <mat-expansion-panel (opened)="formGroupOpenapi.value.isDocumentationActive">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <div class="d-flex justify-content-between toggle-header">
+                                    <div>
+                                        Documentation (OpenAPI)  &nbsp; <i
+                                        class="bi bi-info-circle" [matTooltip]=docTooltip ></i> 
+                                    </div>
+                                    <div>
+                                        <mat-slide-toggle class="example-margin" color="blue"
+                                            formControlName="isDocumentationActive">
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        @if (formGroupOpenapi.value.isDocumentationActive) {
+                            <p>General OpenAPI information for your developers. All fields are optional.</p>
+                            <div class="d-flex">
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="summary" class="form-label">Summary or Title</label>
+                                    <input type="text" class="input-size form-control" id="summary" formControlName="summary"
+                                        placeholder="Short description">
+                                    <div class="form-text">The title or summary of this endpoint.</div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="description" class="form-label">Description</label>
+                                    <input type="text" class="input-size form-control" formControlName="description"
+                                        placeholder="This is an API. Read more at [http://blah](http://blah.blah.com)" />
+                                    <div class="form-text">Long description for this endpoint</div>
+                                </div>
+            
+                            </div>
+                            <div class="d-flex gap-2 mt-3">
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="tags" class="form-label">Tags</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="text" class="input-size form-control" id="tags" formControlName="tags"
+                                            placeholder="foo" />
+                                        <button type="button" class="btn btn-outline-primary"
+                                            (click)="addParameter('tags')">Add</button>
+                                    </div>
+                                    <div class="form-text">OpenAPI segments the endpoints in different tag.</div>
+                                    <div class="mt-3 d-flex">
+                                        <button *ngFor="let tag of tagsArray; let i = index" class="parameter-item">
+                                            {{ tag }}<mat-icon (click)="removeParameter(i,'tags')"
+                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+            
+                                <div class="col-sm-12 col-md-6">
+                                    <label for="audience" class="form-label" id="audience">Audience</label>
+                                    <div class="d-flex gap-2">
+                                        <input type="text" class="input-size form-control" formControlName="audiences"
+                                            placeholder="foo" />
+                                        <button type="button" class="btn btn-outline-primary"
+                                            (click)="addParameter('audiences')">Add</button>
+                                    </div>
+                                    <div class="form-text">To which audiences you will document this endpoint (e.g.: silver if you
+                                        have plans like gold, silver, bronze.)</div>
+                                    <div class="mt-3 d-flex">
+                                        <button *ngFor="let item of audienceArray; let i = index" class="parameter-item">
+                                            {{ item }}<mat-icon (click)="removeParameter(i,'audiences')"
+                                                class="d-flex align-items-center justify-content-end">close</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+            
+                            </div>
+                            <hr class="mt-4">
+                            <h2>Global Settings</h2>
+                            <a>go to openapi settings</a>
+                            <div>
+                                <label for="example" class="form-label">Example</label>
+                                <textarea class="static-text-area form-control" id="example" formControlName="example"></textarea>
+                                <div class="form-text">Deprecated in OAS3. Write an example response in JSON format to show as an
+                                    example in the documentation</div>
+                            </div>
+                        }   
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <div class="col-sm-12 mt-3">
+                    <!-- <button class="btn btn-primary" (click)="submit()">Save</button> -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

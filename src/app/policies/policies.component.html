@@ -4,7 +4,7 @@
             <div class="col-sm-12">
                 <h3>Policies</h3>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-12">
                 <mat-accordion [multi]="true">
                     <mat-expansion-panel (opened)="formGroupPolicies.value.isSpFilterActive">
                         <mat-expansion-panel-header>
@@ -268,6 +268,10 @@
                         }
                     </mat-expansion-panel>
                 </mat-accordion>
+
+                <div class="col-sm-12 mt-3">
+                    <button class="btn btn-primary" (click)="submit()">Save</button>
+                </div>
             </div>
         </div>
     </form>

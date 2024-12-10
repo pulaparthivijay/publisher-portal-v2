@@ -133,96 +133,8 @@ export class ThrottlingComponent implements OnInit {
   submit() {
     console.log(this.formGroupThrottling.value);
 
-    // const body = {
-    //   "qos/ratelimit/router": {
-    //     "max_rate": 0
-    //   },
-    //   "plugin/http-server": {
-    //     "name": [
-    //       "string"
-    //     ],
-    //     "geoip": {
-    //       "citydb_path": "string"
-    //     },
-    //     "url-rewrite": {
-    //       "literal": {},
-    //       "regexp": [
-    //         [
-    //           "string"
-    //         ]
-    //       ]
-    //     },
-    //     "ip-filter": {
-    //       "CIDR": [
-    //         "string"
-    //       ],
-    //       "allow": true,
-    //       "client_ip_headers": [
-    //         "string"
-    //       ],
-    //       "trusted_proxies": [
-    //         "string"
-    //       ]
-    //     },
-    //     "jwk-aggregator": {
-    //       "cache": true,
-    //       "origins": [
-    //         "string"
-    //       ],
-    //       "port": 0
-    //     },
-    //     "redis-ratelimit": {
-    //       "burst": 0,
-    //       "host": "string",
-    //       "period": "string",
-    //       "rate": 0,
-    //       "tokenizer": "string",
-    //       "tokenizer_field": "string"
-    //     },
-    //     "static-filesystem": {
-    //       "path": "string",
-    //       "prefix": "string",
-    //       "skip": [
-    //         "string"
-    //       ]
-    //     },
-    //     "virtualhost": {
-    //       "hosts": [
-    //         "string"
-    //       ]
-    //     },
-    //     "wildcard": {
-    //       "endpoints": {}
-    //     }
-    //   },
-    //   "plugin/req-resp-modifier": {
-    //     "name": [
-    //       "string"
-    //     ],
-    //     "content-replacer": {},
-    //     "ip-filter": {
-    //       "CIDR": [
-    //         "string"
-    //       ],
-    //       "allow": true,
-    //       "client_ip_headers": [
-    //         "string"
-    //       ],
-    //       "trusted_proxies": [
-    //         "string"
-    //       ]
-    //     },
-    //     "response-schema-validator": {
-    //       "error": {
-    //         "body": "string",
-    //         "status": 0
-    //       },
-    //       "schema": {}
-    //     }
-    //   }
-    // }
-
     const body = {
+      "throttling":{
       ...(this.formGroupThrottling.value?.isEndPointRateLimitEnabledActive && {
         "qos/ratelimit/router": {
           ...(this.formGroupThrottling.value?.rateLimit && { "max_rate": this.formGroupThrottling.value?.rateLimit }),
@@ -240,12 +152,12 @@ export class ThrottlingComponent implements OnInit {
           ].filter(Boolean),
           ...(this.formGroupThrottling.value?.isRedisRateLimitEnabledActive && {
             "redis-ratelimit": {
-              ...(this.formGroupThrottling.value?.address && { "Host": this.formGroupThrottling.value?.address }),
-              ...(this.formGroupThrottling.value?.tokenizer && { "Tokenizer": this.formGroupThrottling.value?.tokenizer }),
-              ...(this.formGroupThrottling.value?.burst && { "Burst": this.formGroupThrottling.value?.burst }),
-              ...(this.formGroupThrottling.value?.rate && { "Rate": this.formGroupThrottling.value?.rate }),
-              ...(this.formGroupThrottling.value?.periods && { "Period": this.formGroupThrottling.value?.periods }),
-              ...(this.formGroupThrottling.value?.tokenizerField && { "TokenizerField": this.formGroupThrottling.value?.tokenizerField })
+              ...(this.formGroupThrottling.value?.address && { "host": this.formGroupThrottling.value?.address }),
+              ...(this.formGroupThrottling.value?.tokenizer && { "tokenizer": this.formGroupThrottling.value?.tokenizer }),
+              ...(this.formGroupThrottling.value?.burst && { "burst": this.formGroupThrottling.value?.burst }),
+              ...(this.formGroupThrottling.value?.rate && { "rate": this.formGroupThrottling.value?.rate }),
+              ...(this.formGroupThrottling.value?.periods && { "period": this.formGroupThrottling.value?.periods }),
+              ...(this.formGroupThrottling.value?.tokenizerField && { "tokenizerField": this.formGroupThrottling.value?.tokenizerField })
             }
           })
         }
@@ -264,23 +176,24 @@ export class ThrottlingComponent implements OnInit {
             }
           })
         }
-      })
+      }),
+    },
+      ...(this.formGroupThrottling.value?.timeout &&{"timeout":this.formGroupThrottling.value?.timeout}),
+      ...(this.formGroupThrottling.value?.cacheTtl &&{"cache_ttl":this.formGroupThrottling.value?.cacheTtl})
+
 
     }
 
     console.log(body);
 
-
-
-
-    // this.endpointService.addParameterForwarding(this.endpointId,body).subscribe({
-    //   next:(res)=>{
-    //     console.log("added", res);
-    //   },
-    //   error:(err)=>{
-    //     console.error(err)
-    //   }
-    // })
+    this.endpointService.addThrottling(this.endpointId,body).subscribe({
+      next:(res)=>{
+        console.log("added", res);
+      },
+      error:(err)=>{
+        console.error(err)
+      }
+    })
   }
 
 

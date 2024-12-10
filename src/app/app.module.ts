@@ -40,6 +40,8 @@ import {MatChipsModule} from '@angular/material/chips';
 import { ThrottlingComponent } from './throttling/throttling.component';
 import { PoliciesComponent } from './policies/policies.component';
 import { ResponseManipulationComponent } from './response-manipulation/response-manipulation.component';
+import { ConnectivityComponent } from './connectivity/connectivity.component';
+import { OpenapiComponent } from './openapi/openapi.component';
 
 // keycloak
 function initializeKeycloak(keycloak: KeycloakService){
@@ -86,7 +88,9 @@ function initializeKeycloak(keycloak: KeycloakService){
     BackendComponent,
     ThrottlingComponent,
     PoliciesComponent,
-    ResponseManipulationComponent
+    ResponseManipulationComponent,
+    ConnectivityComponent,
+    OpenapiComponent
   ],
   imports: [
     BrowserModule,

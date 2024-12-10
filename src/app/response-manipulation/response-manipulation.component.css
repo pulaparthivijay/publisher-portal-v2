@@ -1,0 +1,41 @@
+.static-text-area{
+    background-color: black;
+    width:80%;
+    color:white;
+}
+.input-size{
+    width: 90%;
+    border:1px solid lightgray;
+    border-radius: 5px;
+}
+.exp-span{
+    padding-left: 20px;
+}
+
+.exp-info {
+    max-height: 200px;
+    overflow-y: auto; 
+    padding: 10px; 
+    background-color: #f0f0f0;
+    border-left: 4px solid rgba(133, 20, 245, 1); 
+    font-family: monospace; 
+  }
+  
+  .exp-info pre{
+    margin-bottom: 0px;
+  }
+  
+  .exp-main h4{
+    margin-bottom: 0px;
+  }
+
+
+  .heading-with-toggle h3 {
+    margin: 0px;
+  }
+
+  .toggle-header{
+    width: 100%;
+  }
+  
+  
